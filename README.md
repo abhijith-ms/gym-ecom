@@ -29,7 +29,7 @@ A complete ecommerce application built with the MERN stack (MongoDB, Express.js,
 - **Order System**: Complete order tracking and management
 - **Payment Records**: Payment history and transaction tracking
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React 19** - UI framework
@@ -54,7 +54,7 @@ A complete ecommerce application built with the MERN stack (MongoDB, Express.js,
 - **Helmet** - Security headers
 - **CORS** - Cross-origin resource sharing
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 - Node.js (v16 or higher)
@@ -191,7 +191,7 @@ A complete ecommerce application built with the MERN stack (MongoDB, Express.js,
 }
 ```
 
-## 🔐 Authentication
+## Authentication
 
 The app uses JWT (JSON Web Tokens) for authentication:
 
@@ -200,7 +200,7 @@ The app uses JWT (JSON Web Tokens) for authentication:
 - **Protected Routes**: Role-based access control
 - **Token Management**: Automatic token refresh and logout
 
-## 💳 Payment Integration
+## Payment Integration
 
 ### Razorpay Features
 - **Payment Processing**: Credit cards, debit cards, UPI, net banking
@@ -219,7 +219,7 @@ The app uses JWT (JSON Web Tokens) for authentication:
 6. Payment verification
 7. Order confirmation
 
-## 🛍️ Shopping Features
+## Shopping Features
 
 ### Product Management
 - **Categories**: Men, Women, Unisex, Accessories, Shoes
@@ -242,7 +242,7 @@ The app uses JWT (JSON Web Tokens) for authentication:
 - **Order Cancellation**: Cancel orders within time limits
 - **Email Notifications**: Order status updates
 
-## 👨‍💼 Admin Features
+## Admin Features
 
 ### Product Management
 - **Add Products**: Complete product creation with images
@@ -263,7 +263,7 @@ The app uses JWT (JSON Web Tokens) for authentication:
 - **Role Management**: Assign admin roles
 - **User Statistics**: Analytics and insights
 
-## 🔍 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /api/auth/register` - User registration
@@ -292,7 +292,7 @@ The app uses JWT (JSON Web Tokens) for authentication:
 - `POST /api/payments/verify` - Verify payment
 - `POST /api/payments/webhook` - Razorpay webhook
 
-## 🚀 Deployment
+## Deployment
 
 ### Backend Deployment
 1. Set up MongoDB Atlas or local MongoDB
@@ -306,14 +306,14 @@ The app uses JWT (JSON Web Tokens) for authentication:
 3. Configure environment variables
 4. Update API URL in production
 
-## 📱 Sample Data
+## Sample Data
 
 The seed script creates:
 - **Admin User**: `admin@gym.com` / `admin123`
 - **Regular User**: `john@gym.com` / `user123`
 - **8 Sample Products**: Across different categories
 
-## 🔧 Development
+## Development
 
 ### Available Scripts
 
@@ -354,18 +354,18 @@ VITE_API_URL=http://localhost:5000/api
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
 
-## 🆘 Support
+## Support
 
 For support and questions:
 - Create an issue in the repository
 - Contact the development team
 - Check the documentation
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 - [ ] Email notifications
 - [ ] SMS notifications
