@@ -34,6 +34,7 @@ const Checkout = () => {
     e.preventDefault();
     setLoading(true);
     try {
+      console.log('Cart items:', items);
       const orderItems = items.map(item => ({
         product: item.product._id,
         name: item.product.name,
@@ -48,11 +49,14 @@ const Checkout = () => {
         shippingAddress: address,
         paymentMethod: 'cod',
       };
+      console.log('Order data being sent:', orderData);
       const res = await ordersAPI.create(orderData);
+      console.log('Order response:', res.data);
       clearCart();
       toast.success('Order placed successfully!');
       navigate(`/order-confirmation/${res.data.order._id}`);
     } catch (err) {
+      console.error('Order creation error:', err.response?.data);
       toast.error('Failed to place order');
     } finally {
       setLoading(false);
