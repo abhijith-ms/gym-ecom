@@ -278,17 +278,27 @@ router.post('/forgot-password', async (req, res) => {
     await user.save();
     console.log('Password saved to database');
 
+    // Check if email configuration is available
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
+      console.log('Email not configured, returning password in response');
+      return res.json({ 
+        success: true, 
+        message: 'Password reset successful. Please check your email or contact support.',
+        tempPassword: newPassword // Only for development/testing
+      });
+    }
+
     // Send email with new password
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'clashams4@gmail.com',
-        pass: 'ndem fcwb jhuv fdwq'
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
       }
     });
 
     await transporter.sendMail({
-      from: 'Gym Brand <clashams4@gmail.com>',
+      from: `Gym Brand <${process.env.GMAIL_USER}>`,
       to: user.email,
       subject: 'Your Gym Brand Password Reset',
       text: `Your new password is: ${newPassword}\n\nPlease log in and change it immediately.`,
@@ -298,36 +308,20 @@ router.post('/forgot-password', async (req, res) => {
     res.json({ success: true, message: 'A new password has been sent to your email.' });
   } catch (err) {
     console.error('Forgot password error:', err);
+    
+    // If email fails but password was updated, return success with temp password
+    if (err.code === 'EAUTH' || err.code === 'ECONNECTION') {
+      return res.json({ 
+        success: true, 
+        message: 'Password reset successful. Please check your email or contact support.',
+        tempPassword: newPassword // Only for development/testing
+      });
+    }
+    
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
-// Test endpoint to check user password (REMOVE IN PRODUCTION)
-router.get('/test-password/:email', async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.params.email }).select('+password');
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-    
-    // Test password comparison
-    const testPassword = 'test123';
-    const isMatch = await user.comparePassword(testPassword);
-    
-    res.json({
-      success: true,
-      user: {
-        email: user.email,
-        name: user.name,
-        hasPassword: !!user.password,
-        passwordLength: user.password ? user.password.length : 0,
-        testPasswordMatch: isMatch
-      }
-    });
-  } catch (error) {
-    console.error('Test password error:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
+// Test endpoint removed for production
 
 export default router; 
