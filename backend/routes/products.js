@@ -166,7 +166,7 @@ router.post('/', protect, authorize('admin'), [
   body('name').notEmpty().withMessage('Product name is required'),
   body('description').notEmpty().withMessage('Product description is required'),
   body('price').isFloat({ min: 0 }).withMessage('Valid price is required'),
-  body('category').isIn(['men', 'women', 'unisex', 'accessories', 'shoes']).withMessage('Valid category is required'),
+  body('category').isIn(['topwear', 'bottomwear']).withMessage('Valid category is required'),
   body('brand').notEmpty().withMessage('Brand is required'),
   body('material').notEmpty().withMessage('Material is required'),
   body('stock').isInt({ min: 0 }).withMessage('Valid stock quantity is required')
