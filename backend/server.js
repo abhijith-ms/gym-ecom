@@ -8,6 +8,9 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import Razorpay from 'razorpay';
 
+// Import models
+import User from './models/User.js';
+
 // Import routes
 import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
@@ -88,6 +91,62 @@ app.get('/api/seed', async (req, res) => {
     });
   } catch (error) {
     console.error('Seed route error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+});
+
+// Create admin user route (for development/testing)
+app.post('/api/create-admin', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name, email, and password are required'
+      });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User with this email already exists'
+      });
+    }
+
+    // Create admin user
+    const adminUser = await User.create({
+      name,
+      email,
+      password,
+      role: 'admin',
+      phone: '+1234567890',
+      address: {
+        street: 'Admin Address',
+        city: 'Admin City',
+        state: 'Admin State',
+        zipCode: '12345',
+        country: 'Admin Country'
+      }
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Admin user created successfully',
+      user: {
+        id: adminUser._id,
+        name: adminUser.name,
+        email: adminUser.email,
+        role: adminUser.role
+      }
+    });
+  } catch (error) {
+    console.error('Create admin error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error'
