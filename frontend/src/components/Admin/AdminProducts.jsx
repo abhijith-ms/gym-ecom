@@ -89,11 +89,15 @@ export default function AdminProducts() {
         images: form.images,
         sizes: form.sizes
       };
-      await api.post("/products", payload);
+      console.log('Form data being sent:', payload);
+      console.log('Form state:', form);
+      const response = await api.post("/products", payload);
+      console.log('Response:', response.data);
       setShowModal(false);
       setForm(initialForm);
       fetchProducts();
     } catch (err) {
+      console.error('Error response:', err.response?.data);
       setFormError(err.response?.data?.message || "Failed to add product");
     } finally {
       setFormLoading(false);
