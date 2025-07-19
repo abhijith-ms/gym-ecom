@@ -29,7 +29,11 @@ app.use(limiter);
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:5173',
+    'https://*.vercel.app',
+    'https://*.railway.app'
+  ],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
