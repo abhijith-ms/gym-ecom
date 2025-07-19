@@ -323,4 +323,48 @@ router.post('/:id/reviews', protect, [
   }
 });
 
+// @desc    Update product stock (for testing)
+// @route   PATCH /api/products/:id/stock
+// @access  Public (for testing)
+router.patch('/:id/stock', [
+  body('stock').isInt({ min: 0 }).withMessage('Valid stock quantity is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array()
+      });
+    }
+
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found'
+      });
+    }
+
+    product.stock = req.body.stock;
+    await product.save();
+
+    res.json({
+      success: true,
+      message: 'Stock updated successfully',
+      product: {
+        name: product.name,
+        stock: product.stock
+      }
+    });
+  } catch (error) {
+    console.error('Update stock error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+});
+
 export default router; 
