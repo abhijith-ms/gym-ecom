@@ -1,0 +1,25 @@
+# Backend Environment Variables
+NODE_ENV=production
+PORT=5000
+
+# MongoDB
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/gym-ecom?retryWrites=true&w=majority
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key-here
+
+# Razorpay
+RAZORPAY_KEY_ID=rzp_test_your_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_secret_key
+
+# Gmail SMTP
+GMAIL_USER=your-email@gmail.com
+GMAIL_PASS=your-app-password
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# Frontend Environment Variables
+VITE_API_URL=http://localhost:5000 
