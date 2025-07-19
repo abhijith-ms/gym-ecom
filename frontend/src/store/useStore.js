@@ -110,7 +110,7 @@ export const useCartStore = create(
             item.product._id === productId && 
             item.size === size && 
             item.color === color
-              ? { ...item, quantity: Math.max(0, quantity) }
+              ? { ...item, quantity: Math.max(0, Math.min(quantity, item.product.stock)) }
               : item
           ),
         });

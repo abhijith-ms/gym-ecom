@@ -32,9 +32,25 @@ const Checkout = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    
+    // Check stock before submitting
+    for (const item of items) {
+      if (item.quantity > item.product.stock) {
+        toast.error(`Insufficient stock for ${item.product.name}. Available: ${item.product.stock}`);
+        return;
+      }
+    }
+    
     setLoading(true);
     try {
       console.log('Cart items:', items);
+      console.log('Cart items details:', items.map(item => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        stock: item.product.stock,
+        size: item.size,
+        color: item.color
+      })));
       const orderItems = items.map(item => ({
         product: item.product._id,
         name: item.product.name,
