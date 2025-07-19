@@ -508,7 +508,7 @@ export default function AdminProducts() {
             </form>
             </div>
           </div>
-        </div>
+        
       )}
 
       {editModal && (
