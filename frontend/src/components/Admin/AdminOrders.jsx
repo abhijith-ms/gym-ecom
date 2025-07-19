@@ -44,7 +44,7 @@ export default function AdminOrders() {
     setStatusUpdating(true);
     setStatusError(null);
     try {
-      await api.put(`/orders/${selectedOrder._id}`, { status: newStatus });
+      await api.put(`/orders/${selectedOrder._id}/status`, { status: newStatus });
       setSelectedOrder((prev) => ({ ...prev, status: newStatus }));
       setOrders((prev) => prev.map(o => o._id === selectedOrder._id ? { ...o, status: newStatus } : o));
     } catch (err) {

@@ -345,9 +345,11 @@ export default function AdminProducts() {
                     <td className="p-3">₹{product.price}</td>
                     <td className="p-3 capitalize">{product.category}</td>
                     <td className="p-3">{product.stock}</td>
-                    <td className="p-3 space-x-2">
-                      <button className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition" onClick={() => openEditModal(product)}>Edit</button>
-                      <button className="px-3 py-1 bg-scars-red text-white rounded hover:bg-red-700 transition" onClick={() => openDeleteModal(product._id)}>Delete</button>
+                    <td className="p-3">
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <button className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition text-sm" onClick={() => openEditModal(product)}>Edit</button>
+                        <button className="px-3 py-1 bg-scars-red text-white rounded hover:bg-red-700 transition text-sm" onClick={() => openDeleteModal(product._id)}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                 ))

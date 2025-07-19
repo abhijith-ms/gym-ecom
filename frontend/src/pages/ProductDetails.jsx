@@ -90,6 +90,11 @@ const ProductDetails = () => {
             <p className="text-md text-gray-400 line-through mb-2">${product.originalPrice}</p>
           )}
           <p className="mb-4">{product.description}</p>
+          {product.stock > 0 && product.stock < 5 && (
+            <p className="text-red-600 text-sm font-medium mb-2">
+              ⚠️ Only {product.stock} left in stock!
+            </p>
+          )}
           <div className="flex gap-4 mb-4">
             <div>
               <label className="block text-sm mb-1">Size</label>
@@ -127,12 +132,21 @@ const ProductDetails = () => {
               />
             </div>
           </div>
-          <button
-            onClick={handleAddToCart}
-            className="bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition mb-2"
-          >
-            Add to Cart
-          </button>
+          {product.stock > 0 ? (
+            <button
+              onClick={handleAddToCart}
+              className="bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition mb-2"
+            >
+              Add to Cart
+            </button>
+          ) : (
+            <button
+              disabled
+              className="bg-gray-400 text-white py-3 rounded-lg font-semibold mb-2 cursor-not-allowed"
+            >
+              Out of Stock
+            </button>
+          )}
           <div className="flex gap-2">
             <button
               onClick={() => navigate('/cart')}
