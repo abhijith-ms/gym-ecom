@@ -57,6 +57,7 @@ const Checkout = () => {
       navigate(`/order-confirmation/${res.data.order._id}`);
     } catch (err) {
       console.error('Order creation error:', err.response?.data);
+      console.error('Full error object:', err);
       toast.error('Failed to place order');
     } finally {
       setLoading(false);

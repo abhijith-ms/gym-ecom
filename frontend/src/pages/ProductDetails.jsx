@@ -11,6 +11,7 @@ const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
   const navigate = useNavigate();
   const addItem = useCartStore(state => state.addItem);
   const { items: wishlist, addItem: addWishlist, removeItem: removeWishlist } = useWishlistStore();
@@ -50,7 +51,7 @@ const ProductDetails = () => {
     }
     addItem(product, quantity, selectedSize, selectedColor);
     toast.success('Added to cart!');
-    navigate('/cart');
+    // Stay on same page instead of navigating to cart
   };
 
   if (loading) return <div className="text-center py-12 text-gray-500">Loading product...</div>;
@@ -62,17 +63,20 @@ const ProductDetails = () => {
         {/* Images */}
         <div className="md:w-1/2 flex flex-col gap-4">
           <img
-            src={product.images?.[0]?.url || 'https://via.placeholder.com/400'}
+            src={product.images?.[selectedImage]?.url || 'https://via.placeholder.com/400'}
             alt={product.name}
             className="w-full h-96 object-cover rounded"
           />
           <div className="flex gap-2">
-            {product.images?.slice(1).map((img, idx) => (
+            {product.images?.map((img, idx) => (
               <img
                 key={idx}
                 src={img.url}
                 alt={img.altText || product.name}
-                className="w-20 h-20 object-cover rounded border"
+                className={`w-20 h-20 object-cover rounded border cursor-pointer transition-all ${
+                  selectedImage === idx ? 'border-2 border-black' : 'border-gray-300'
+                }`}
+                onClick={() => setSelectedImage(idx)}
               />
             ))}
           </div>
@@ -129,12 +133,20 @@ const ProductDetails = () => {
           >
             Add to Cart
           </button>
-          <button
-            onClick={handleWishlist}
-            className={`border py-2 rounded-lg font-semibold w-full ${isWishlisted ? 'bg-scars-red text-white' : 'bg-white text-scars-black'}`}
-          >
-            {isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate('/cart')}
+              className="border border-black text-black py-2 rounded-lg font-semibold flex-1 hover:bg-gray-100 transition"
+            >
+              View Cart
+            </button>
+            <button
+              onClick={handleWishlist}
+              className={`border py-2 rounded-lg font-semibold flex-1 ${isWishlisted ? 'bg-scars-red text-white' : 'bg-white text-scars-black'}`}
+            >
+              {isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
