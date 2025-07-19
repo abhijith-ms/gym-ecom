@@ -121,6 +121,8 @@ router.post('/login', [
     console.log('Login successful for user:', email);
     // Generate token
     const token = generateToken(user._id);
+    console.log('Generated token:', token);
+    console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
 
     res.json({
       success: true,

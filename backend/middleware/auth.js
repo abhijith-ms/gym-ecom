@@ -19,9 +19,11 @@ export const protect = async (req, res, next) => {
   try {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Token decoded:', decoded);
     
     // Get user from token
     req.user = await User.findById(decoded.id).select('-password');
+    console.log('User found:', req.user ? req.user.email : 'No user');
     
     if (!req.user) {
       return res.status(401).json({
@@ -32,6 +34,7 @@ export const protect = async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.error('Auth middleware error:', error.message);
     return res.status(401).json({
       success: false,
       message: 'Not authorized to access this route'
