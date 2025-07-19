@@ -51,8 +51,8 @@ app.use('/api/users', userRoutes);
 
 // Root route
 app.get('/', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'Gym Ecommerce API is running',
     version: '1.0.0',
     endpoints: {
@@ -64,6 +64,35 @@ app.get('/', (req, res) => {
       users: '/api/users'
     }
   });
+});
+
+// Seed database route (for development/testing)
+app.get('/api/seed', async (req, res) => {
+  try {
+    const { exec } = await import('child_process');
+    exec('npm run seed', (error, stdout, stderr) => {
+      if (error) {
+        console.error('Seed error:', error);
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to seed database',
+          error: error.message
+        });
+      }
+      console.log('Seed output:', stdout);
+      res.json({
+        success: true,
+        message: 'Database seeded successfully',
+        output: stdout
+      });
+    });
+  } catch (error) {
+    console.error('Seed route error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
 });
 
 // Health check
