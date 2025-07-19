@@ -26,7 +26,7 @@ const NewArrivals = () => {
   return (
     <section className="py-16 px-4 lg:px-0">
       <div className="container mx-auto text-center mb-10">
-        <h2 className="text-3xl font-bold mb-4">New Arrivals</h2>
+        <h2 className="text-3xl font-bold mb-4 text-scars-black">New Arrivals</h2>
         <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
           Discover the latest in men's gym topwear and bottomwear.
         </p>
@@ -40,16 +40,16 @@ const NewArrivals = () => {
               <Link
                 key={product._id}
                 to={`/products/${product._id}`}
-                className="border rounded-lg p-4 hover:shadow-lg flex flex-col transition"
+                className="border rounded-lg p-4 hover:shadow-lg flex flex-col transition hover:border-scars-red"
               >
                 <img
                   src={product.images?.[0]?.url || 'https://via.placeholder.com/300'}
                   alt={product.name}
                   className="w-full h-48 object-cover rounded mb-4"
                 />
-                <h3 className="font-semibold text-lg mb-1">{product.name}</h3>
+                <h3 className="font-semibold text-lg mb-1 text-scars-black">{product.name}</h3>
                 <p className="text-gray-600 mb-2">{product.brand}</p>
-                <span className="text-xl font-bold">₹{product.price}</span>
+                <span className="text-xl font-bold text-scars-red">₹{product.price}</span>
               </Link>
             ))}
           </div>

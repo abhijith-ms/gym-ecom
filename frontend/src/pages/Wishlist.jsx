@@ -32,7 +32,7 @@ const Wishlist = () => {
               <span className="text-xl font-bold">${item.price}</span>
               <button
                 onClick={() => removeItem(item._id)}
-                className="text-red-600 hover:underline text-sm"
+                className="text-scars-red hover:underline text-sm"
               >Remove</button>
             </div>
           </div>

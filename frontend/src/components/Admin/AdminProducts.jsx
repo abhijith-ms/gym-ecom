@@ -9,7 +9,7 @@ const initialForm = {
   brand: "",
   material: "",
   stock: "",
-  image: "",
+  images: [],
   sizes: []
 };
 
@@ -35,6 +35,8 @@ export default function AdminProducts() {
   const [deleteError, setDeleteError] = useState(null);
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
+  const [imageUploading, setImageUploading] = useState(false);
+  const [editImageUploading, setEditImageUploading] = useState(false);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -62,6 +64,19 @@ export default function AdminProducts() {
     setForm(f => ({ ...f, [name]: value }));
   };
 
+  // Add Product Modal: handle image upload
+  const handleAddImages = async e => {
+    const files = Array.from(e.target.files);
+    setImageUploading(true);
+    const urls = [];
+    for (const file of files) {
+      const url = await uploadToCloudinary(file, setImageUploading);
+      if (url) urls.push({ url });
+    }
+    setForm(f => ({ ...f, images: [...(f.images || []), ...urls] }));
+    setImageUploading(false);
+  };
+
   const handleAddProduct = async e => {
     e.preventDefault();
     setFormLoading(true);
@@ -71,7 +86,7 @@ export default function AdminProducts() {
         ...form,
         price: parseFloat(form.price),
         stock: parseInt(form.stock, 10),
-        images: [{ url: form.image }],
+        images: form.images,
         sizes: form.sizes
       };
       await api.post("/products", payload);
@@ -94,7 +109,7 @@ export default function AdminProducts() {
       brand: product.brand,
       material: product.material,
       stock: product.stock,
-      image: product.images?.[0]?.url || "",
+      images: product.images || [],
       sizes: product.sizes || []
     });
     setEditId(product._id);
@@ -114,6 +129,19 @@ export default function AdminProducts() {
     setEditForm(f => ({ ...f, [name]: value }));
   };
 
+  // Edit Product Modal: handle image upload
+  const handleEditAddImages = async e => {
+    const files = Array.from(e.target.files);
+    setEditImageUploading(true);
+    const urls = [];
+    for (const file of files) {
+      const url = await uploadToCloudinary(file, setEditImageUploading);
+      if (url) urls.push({ url });
+    }
+    setEditForm(f => ({ ...f, images: [...(f.images || []), ...urls] }));
+    setEditImageUploading(false);
+  };
+
   const handleEditProduct = async e => {
     e.preventDefault();
     setEditLoading(true);
@@ -123,7 +151,7 @@ export default function AdminProducts() {
         ...editForm,
         price: parseFloat(editForm.price),
         stock: parseInt(editForm.stock, 10),
-        images: [{ url: editForm.image }],
+        images: editForm.images,
         sizes: editForm.sizes
       };
       await api.put(`/products/${editId}`, payload);
@@ -162,8 +190,37 @@ export default function AdminProducts() {
     }
   };
 
+  // Cloudinary upload function
+  async function uploadToCloudinary(file, setUploading) {
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ecommerce_unsigned");
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/dlqaafhko/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      return data.secure_url;
+    } catch (err) {
+      alert("Image upload failed");
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  // Helper to move image in array
+  function moveImage(arr, from, to) {
+    const updated = [...arr];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    return updated;
+  }
+
   return (
-    <div>
+    <div className="px-2 md:px-8 py-4 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <input
           type="text"
@@ -195,7 +252,7 @@ export default function AdminProducts() {
       {loading ? (
         <div className="text-center py-10">Loading products...</div>
       ) : error ? (
-        <div className="text-center text-red-600 py-10">{error}</div>
+                    <div className="text-center text-scars-red py-10">{error}</div>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border rounded shadow">
@@ -232,7 +289,7 @@ export default function AdminProducts() {
                     <td className="p-3">{product.stock}</td>
                     <td className="p-3 space-x-2">
                       <button className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition" onClick={() => openEditModal(product)}>Edit</button>
-                      <button className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition" onClick={() => openDeleteModal(product._id)}>Delete</button>
+                      <button className="px-3 py-1 bg-scars-red text-white rounded hover:bg-red-700 transition" onClick={() => openDeleteModal(product._id)}>Delete</button>
                     </td>
                   </tr>
                 ))
@@ -245,10 +302,10 @@ export default function AdminProducts() {
       {/* Add Product Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-4 md:p-6 relative">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl"
-              onClick={() => setShowModal(false)}
+              onClick={() => { setShowModal(false); }}
               aria-label="Close"
             >
               &times;
@@ -292,8 +349,29 @@ export default function AdminProducts() {
                 <input name="material" value={form.material} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
               </div>
               <div>
-                <label className="block mb-1 font-medium">Image URL</label>
-                <input name="image" value={form.image} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
+                <label className="block mb-1 font-medium">Images</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleAddImages}
+                  className="w-full border rounded px-3 py-2"
+                />
+                {imageUploading && <div className="text-blue-600 text-sm mt-1">Uploading...</div>}
+                {form.images && form.images.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {form.images.map((img, idx) => (
+                      <div key={idx} className="relative w-20 h-20">
+                        <img src={img.url} alt="Preview" className="w-20 h-20 object-cover rounded" />
+                        <div className="absolute top-1 right-1 flex flex-col gap-1">
+                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === 0} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx-1) }))}>&uarr;</button>
+                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === form.images.length-1} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx+1) }))}>&darr;</button>
+                          <button type="button" className="bg-scars-red text-white rounded p-0.5 shadow" onClick={() => setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}>&times;</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block mb-1 font-medium">Sizes</label>
@@ -319,7 +397,7 @@ export default function AdminProducts() {
                   ))}
                 </div>
               </div>
-              {formError && <div className="text-red-600 text-sm">{formError}</div>}
+              {formError && <div className="text-scars-red text-sm">{formError}</div>}
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-60"
@@ -334,10 +412,10 @@ export default function AdminProducts() {
 
       {editModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-4 md:p-6 relative">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl"
-              onClick={closeEditModal}
+              onClick={() => { closeEditModal(); }}
               aria-label="Close"
             >
               &times;
@@ -381,8 +459,29 @@ export default function AdminProducts() {
                 <input name="material" value={editForm.material} onChange={handleEditFormChange} required className="w-full border rounded px-3 py-2" />
               </div>
               <div>
-                <label className="block mb-1 font-medium">Image URL</label>
-                <input name="image" value={editForm.image} onChange={handleEditFormChange} required className="w-full border rounded px-3 py-2" />
+                <label className="block mb-1 font-medium">Images</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleEditAddImages}
+                  className="w-full border rounded px-3 py-2"
+                />
+                {editImageUploading && <div className="text-blue-600 text-sm mt-1">Uploading...</div>}
+                {editForm.images && editForm.images.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {editForm.images.map((img, idx) => (
+                      <div key={idx} className="relative w-20 h-20">
+                        <img src={img.url} alt="Preview" className="w-20 h-20 object-cover rounded" />
+                        <div className="absolute top-1 right-1 flex flex-col gap-1">
+                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === 0} onClick={() => setEditForm(f => ({ ...f, images: moveImage(f.images, idx, idx-1) }))}>&uarr;</button>
+                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === editForm.images.length-1} onClick={() => setEditForm(f => ({ ...f, images: moveImage(f.images, idx, idx+1) }))}>&darr;</button>
+                          <button type="button" className="bg-scars-red text-white rounded p-0.5 shadow" onClick={() => setEditForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}>&times;</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block mb-1 font-medium">Sizes</label>
@@ -408,7 +507,7 @@ export default function AdminProducts() {
                   ))}
                 </div>
               </div>
-              {editError && <div className="text-red-600 text-sm">{editError}</div>}
+              {editError && <div className="text-scars-red text-sm">{editError}</div>}
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-60"
@@ -433,7 +532,7 @@ export default function AdminProducts() {
             </button>
             <h2 className="text-xl font-bold mb-4">Delete Product</h2>
             <p className="mb-6">Are you sure you want to delete this product? This action cannot be undone.</p>
-            {deleteError && <div className="text-red-600 text-sm mb-2">{deleteError}</div>}
+            {deleteError && <div className="text-scars-red text-sm mb-2">{deleteError}</div>}
             <div className="flex justify-end gap-2">
               <button
                 className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800"
@@ -443,7 +542,7 @@ export default function AdminProducts() {
                 Cancel
               </button>
               <button
-                className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white"
+                className="px-4 py-2 rounded bg-scars-red hover:bg-red-700 text-white"
                 onClick={handleDeleteProduct}
                 disabled={deleteLoading}
               >

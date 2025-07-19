@@ -2,7 +2,7 @@
 
 A complete ecommerce application built with the MERN stack (MongoDB, Express.js, React, Node.js) featuring Razorpay payment integration, user authentication, product management, and order processing.
 
-## 🚀 Features
+## Features
 
 ### Frontend (React)
 - **Modern UI/UX**: Beautiful, responsive design with Tailwind CSS
@@ -127,7 +127,7 @@ A complete ecommerce application built with the MERN stack (MongoDB, Express.js,
    npm run dev
    ```
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### User Model
 ```javascript
@@ -346,7 +346,7 @@ FRONTEND_URL=http://localhost:5173
 VITE_API_URL=http://localhost:5000/api
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch

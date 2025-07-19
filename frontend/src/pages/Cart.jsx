@@ -48,7 +48,7 @@ const Cart = () => {
               <p className="font-semibold text-lg mb-2">${(item.price * item.quantity).toFixed(2)}</p>
               <button
                 onClick={() => removeItem(item.product._id, item.size, item.color)}
-                className="text-red-600 hover:underline text-sm"
+                className="text-scars-red hover:underline text-sm"
               >Remove</button>
             </div>
           </div>

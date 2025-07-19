@@ -16,7 +16,7 @@ const GenderCollectionSection = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-3">
               Topwear
             </h2>
-            <Link to="/collections?category=topwear" className="text-gray-900 underline font-semibold">
+            <Link to="/collections?category=topwear" className="text-scars-black hover:text-scars-red underline font-semibold transition-colors">
               Shop Now
             </Link>
           </div>
@@ -31,7 +31,7 @@ const GenderCollectionSection = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-3">
               Bottomwear
             </h2>
-            <Link to="/collections?category=bottomwear" className="text-gray-900 underline font-semibold">
+            <Link to="/collections?category=bottomwear" className="text-scars-black hover:text-scars-red underline font-semibold transition-colors">
               Shop Now
             </Link>
           </div>

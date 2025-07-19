@@ -21,6 +21,7 @@ import AdminLayout from "./components/Admin/AdminLayout";
 import AdminProducts from "./components/Admin/AdminProducts";
 import AdminOrders from "./components/Admin/AdminOrders";
 import AdminUsers from "./components/Admin/AdminUsers";
+import AdminOffers from "./components/Admin/AdminOffers";
 
 const App = () => {
   const initializeAuth = useAuthStore(state => state.initializeAuth);
@@ -61,6 +62,7 @@ const App = () => {
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="users" element={<AdminUsers />} />
+          <Route path="offers" element={<AdminOffers />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

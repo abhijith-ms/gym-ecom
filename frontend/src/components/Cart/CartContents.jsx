@@ -49,9 +49,9 @@ const CartContents = () => {
                   <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                   <button 
                      onClick={() => removeItem(item.product._id, item.size, item.color)}
-                     className="mt-2 hover:text-red-700"
+                     className="mt-2 hover:text-scars-red"
                   >
-                     <RiDeleteBin3Line className="h-6 w-6 text-red-600" />
+                                           <RiDeleteBin3Line className="h-6 w-6 text-scars-red" />
                   </button>
                </div>
             </div>

@@ -131,7 +131,7 @@ const ProductDetails = () => {
           </button>
           <button
             onClick={handleWishlist}
-            className={`border py-2 rounded-lg font-semibold w-full ${isWishlisted ? 'bg-red-100 text-red-600' : 'bg-white text-black'}`}
+            className={`border py-2 rounded-lg font-semibold w-full ${isWishlisted ? 'bg-scars-red text-white' : 'bg-white text-scars-black'}`}
           >
             {isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
           </button>

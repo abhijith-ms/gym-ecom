@@ -21,7 +21,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                Shopping Cart ({getTotalItems()})
             </h2>
             <button onClick={onClose}>
-               <IoMdClose className='h-6 w-6 text-gray-600' />
+               <IoMdClose className='h-6 w-6 text-scars-black hover:text-scars-red transition-colors' />
             </button>
          </div>
          
@@ -39,7 +39,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <Link 
                to="/checkout" 
                onClick={onClose}
-               className='w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition block text-center'
+               className='w-full bg-scars-red text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition block text-center'
             >
                Proceed to Checkout
             </Link>

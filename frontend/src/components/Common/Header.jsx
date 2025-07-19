@@ -8,7 +8,7 @@ const Header = () => {
    const toggleCart = useCartStore(state => state.toggleCart);
 
    return (
-      <header className='border-b border-gray-200'>
+      <header className='border-b border-gray-100'>
          {/*  Topbar */}
          <Topbar />
          {/* Navbar */}

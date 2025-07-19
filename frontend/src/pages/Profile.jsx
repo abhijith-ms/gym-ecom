@@ -8,8 +8,9 @@ const Profile = () => {
   const [profile, setProfile] = useState({ name: '', phone: '', address: {} });
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '' });
+  const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [pwLoading, setPwLoading] = useState(false);
+  const [pwError, setPwError] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -53,11 +54,16 @@ const Profile = () => {
 
   const handlePasswordChange = async e => {
     e.preventDefault();
+    setPwError(null);
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      setPwError('New password and confirm password do not match.');
+      return;
+    }
     setPwLoading(true);
     try {
       await authAPI.changePassword(passwords);
       toast.success('Password changed!');
-      setPasswords({ currentPassword: '', newPassword: '' });
+      setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
       toast.error('Failed to change password');
     } finally {
@@ -109,7 +115,17 @@ const Profile = () => {
             placeholder="New Password"
             className="border rounded px-3 py-2"
           />
+          <input
+            name="confirmPassword"
+            value={passwords.confirmPassword}
+            onChange={e => setPasswords({ ...passwords, confirmPassword: e.target.value })}
+            type="password"
+            required
+            placeholder="Confirm New Password"
+            className="border rounded px-3 py-2 md:col-span-2"
+          />
         </div>
+        {pwError && <div className="text-scars-red text-sm mb-2">{pwError}</div>}
         <button
           type="submit"
           disabled={pwLoading}

@@ -15,7 +15,7 @@ const SearchBar = () => {
    }
 
    return (
-      <div className={`flex items-center justify-center w-full transition-all duration-300 text-gray-600 hover:text-gray-800 ${isOpen ? "absolute top-0 left-0 w-full bg-white h-24 z-50" : "w-auto"}`}>
+      <div className={`flex items-center justify-center w-full transition-all duration-300 text-scars-black hover:text-scars-red ${isOpen ? "absolute top-0 left-0 w-full bg-white h-24 z-50" : "w-auto"}`}>
          {isOpen ? (
             <form
                onSubmit={handleSearch}
@@ -30,13 +30,13 @@ const SearchBar = () => {
                   <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2">
                      <button
                         type="submit"
-                        className="text-gray-600 hover:text-gray-800">
+                        className="text-scars-black hover:text-scars-red">
                         <HiMagnifyingGlass className="h-6 w-6" />
                      </button>
                      <button
                         type="button"
                         onClick={handleSearchToggle}
-                        className="text-gray-600 hover:text-gray-800">
+                        className="text-scars-black hover:text-scars-red">
                         <HiMiniXMark className="h-6 w-6" />
                      </button>
                   </div>

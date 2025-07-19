@@ -13,7 +13,7 @@ const Hero = () => {
                <p className="text-base md:text-lg mb-6 ">
                   Premium activewear for every workout.<br />Fast shipping across Kerala.
                </p>
-               <Link to="/collections" className="bg-white text-gray-950 px-6 py-2 rounded-sm text-lg font-semibold shadow hover:bg-gray-100 transition">Shop Now</Link>
+               <Link to="/collections" className="bg-scars-red text-white px-6 py-2 rounded-sm text-lg font-semibold shadow hover:bg-red-700 transition">Shop Now</Link>
             </div>
          </div>
       </section>

@@ -3,6 +3,8 @@ import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { protect } from '../middleware/auth.js';
+import nodemailer from 'nodemailer';
+import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
@@ -91,25 +93,32 @@ router.post('/login', [
     }
 
     const { email, password } = req.body;
+    console.log('Login attempt for email:', email);
 
     // Check if user exists
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
+      console.log('User not found for email:', email);
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'
       });
     }
 
+    console.log('User found, checking password...');
     // Check if password matches
     const isMatch = await user.comparePassword(password);
+    console.log('Password match result:', isMatch);
+    
     if (!isMatch) {
+      console.log('Password does not match for user:', email);
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'
       });
     }
 
+    console.log('Login successful for user:', email);
     // Generate token
     const token = generateToken(user._id);
 
@@ -248,6 +257,76 @@ router.put('/change-password', protect, [
       success: false,
       message: 'Server error'
     });
+  }
+});
+
+// POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    // Generate a random new password
+    const newPassword = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 6);
+    console.log('Generated new password:', newPassword);
+
+    // Update the password
+    user.password = newPassword;
+    await user.save();
+    console.log('Password saved to database');
+
+    // Send email with new password
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'clashams4@gmail.com',
+        pass: 'ndem fcwb jhuv fdwq'
+      }
+    });
+
+    await transporter.sendMail({
+      from: 'Gym Brand <clashams4@gmail.com>',
+      to: user.email,
+      subject: 'Your Gym Brand Password Reset',
+      text: `Your new password is: ${newPassword}\n\nPlease log in and change it immediately.`,
+    });
+
+    console.log('Email sent successfully');
+    res.json({ success: true, message: 'A new password has been sent to your email.' });
+  } catch (err) {
+    console.error('Forgot password error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Test endpoint to check user password (REMOVE IN PRODUCTION)
+router.get('/test-password/:email', async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email }).select('+password');
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    
+    // Test password comparison
+    const testPassword = 'test123';
+    const isMatch = await user.comparePassword(testPassword);
+    
+    res.json({
+      success: true,
+      user: {
+        email: user.email,
+        name: user.name,
+        hasPassword: !!user.password,
+        passwordLength: user.password ? user.password.length : 0,
+        testPasswordMatch: isMatch
+      }
+    });
+  } catch (error) {
+    console.error('Test password error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
