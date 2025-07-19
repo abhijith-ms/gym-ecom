@@ -140,7 +140,7 @@ const Login = () => {
                 onClick={() => setForgotOpen(false)}
                 aria-label="Close"
               >
-                &times;
+                ×
               </button>
               <h3 className="text-lg font-bold mb-2">Reset Password</h3>
               <form

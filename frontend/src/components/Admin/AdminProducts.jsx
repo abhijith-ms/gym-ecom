@@ -371,7 +371,7 @@ export default function AdminProducts() {
                   onClick={() => { setShowModal(false); }}
                   aria-label="Close"
                 >
-                  &times;
+                  ×
                 </button>
               </div>
             </div>
@@ -428,9 +428,9 @@ export default function AdminProducts() {
                       <div key={idx} className="relative w-20 h-20">
                         <img src={img.url} alt="Preview" className="w-20 h-20 object-cover rounded" />
                         <div className="absolute top-1 right-1 flex flex-col gap-1">
-                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === 0} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx-1) }))}>&uarr;</button>
-                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === form.images.length-1} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx+1) }))}>&darr;</button>
-                          <button type="button" className="bg-scars-red text-white rounded p-0.5 shadow" onClick={() => setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}>&times;</button>
+                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === 0} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx-1) }))}>↑</button>
+                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === form.images.length-1} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx+1) }))}>↓</button>
+                          <button type="button" className="bg-scars-red text-white rounded p-0.5 shadow" onClick={() => setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}>×</button>
                         </div>
                       </div>
                     ))}
@@ -522,7 +522,7 @@ export default function AdminProducts() {
                   onClick={() => { closeEditModal(); }}
                   aria-label="Close"
                 >
-                  &times;
+                  ×
                 </button>
               </div>
             </div>
@@ -580,9 +580,9 @@ export default function AdminProducts() {
                       <div key={idx} className="relative w-20 h-20">
                         <img src={img.url} alt="Preview" className="w-20 h-20 object-cover rounded" />
                         <div className="absolute top-1 right-1 flex flex-col gap-1">
-                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === 0} onClick={() => setEditForm(f => ({ ...f, images: moveImage(f.images, idx, idx-1) }))}>&uarr;</button>
-                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === editForm.images.length-1} onClick={() => setEditForm(f => ({ ...f, images: moveImage(f.images, idx, idx+1) }))}>&darr;</button>
-                          <button type="button" className="bg-scars-red text-white rounded p-0.5 shadow" onClick={() => setEditForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}>&times;</button>
+                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === 0} onClick={() => setEditForm(f => ({ ...f, images: moveImage(f.images, idx, idx-1) }))}>↑</button>
+                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === editForm.images.length-1} onClick={() => setEditForm(f => ({ ...f, images: moveImage(f.images, idx, idx+1) }))}>↓</button>
+                          <button type="button" className="bg-scars-red text-white rounded p-0.5 shadow" onClick={() => setEditForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}>×</button>
                         </div>
                       </div>
                     ))}
@@ -671,7 +671,7 @@ export default function AdminProducts() {
               onClick={closeDeleteModal}
               aria-label="Close"
             >
-              &times;
+              ×
             </button>
             <h2 className="text-xl font-bold mb-4">Delete Product</h2>
             <p className="mb-6">Are you sure you want to delete this product? This action cannot be undone.</p>

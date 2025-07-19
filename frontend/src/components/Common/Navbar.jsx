@@ -11,6 +11,7 @@ import { FiLogOut, FiHeart } from "react-icons/fi";
 
 import SearchBar from "./SearchBar";
 import { useAuthStore, useCartStore } from "../../store/useStore";
+import scarsLogo from "../../assets/scars.png";
 
 const Navbar = () => {
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
@@ -31,8 +32,12 @@ const Navbar = () => {
       <nav className="container mx-auto flex items-center justify-between py-4 px-6">
         {/* Logo-left */}
         <div>
-          <Link to="/" className="text-2xl font-bold text-scars-black">
-            SCARS
+          <Link to="/" className="flex items-center">
+            <img 
+              src={scarsLogo} 
+              alt="SCARS Clothing Brand" 
+              className="h-8 md:h-10 object-contain"
+            />
           </Link>
         </div>
         
@@ -146,7 +151,14 @@ const Navbar = () => {
         className={`fixed top-0 left-0 w-3/4 sm:w-1/2 md:w-1/3 h-full bg-white shadow-lg transform transition-transform duration-300 z-50 
           ${navDrawerOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="flex justify-end p-4">
+        <div className="flex justify-between items-center p-4 border-b">
+          <Link to="/" onClick={toggleNavDrawer} className="flex items-center">
+            <img 
+              src={scarsLogo} 
+              alt="SCARS Clothing Brand" 
+              className="h-8 object-contain"
+            />
+          </Link>
           <button 
             onClick={toggleNavDrawer}
             className="transition-all duration-300 hover:scale-105"

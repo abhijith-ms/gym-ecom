@@ -3,11 +3,19 @@ import { RiTwitterXLine } from "react-icons/ri"
 import { TbBrandMeta } from "react-icons/tb"
 import { FiPhoneCall, FiMail } from "react-icons/fi"
 import { Link } from "react-router-dom"
+import scarsLogo from "../../assets/scars.png"
 
 const Footer = () => (
   <footer className="bg-scars-black text-white py-6 mt-8">
     <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-center gap-4">
-      <span className="text-sm">&copy; {new Date().getFullYear()} SCARS Clothing Brand. All rights reserved.</span>
+      <div className="flex items-center gap-2">
+        <img 
+          src={scarsLogo} 
+          alt="SCARS Clothing Brand" 
+          className="h-6 object-contain"
+        />
+        <span className="text-sm">&copy; {new Date().getFullYear()} SCARS Clothing Brand. All rights reserved.</span>
+      </div>
       <div className="flex flex-col md:flex-row gap-2 md:gap-6 items-center text-sm">
         <div className="flex items-center gap-2">
           <FiPhoneCall className="inline-block" />

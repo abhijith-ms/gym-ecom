@@ -191,7 +191,7 @@ export default function AdminUsers() {
               onClick={closeModal}
               aria-label="Close"
             >
-              &times;
+              ×
             </button>
             <h2 className="text-xl font-bold mb-2">User Details</h2>
             <div className="mb-2 text-xs md:text-sm">
