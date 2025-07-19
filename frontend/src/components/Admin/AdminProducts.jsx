@@ -361,17 +361,21 @@ export default function AdminProducts() {
 
       {/* Add Product Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-4 md:p-6 relative">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl"
-              onClick={() => { setShowModal(false); }}
-              aria-label="Close"
-            >
-              &times;
-            </button>
-            <h2 className="text-xl font-bold mb-4">Add Product</h2>
-            <form onSubmit={handleAddProduct} className="space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+            <div className="sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold">Add Product</h2>
+                <button
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                  onClick={() => { setShowModal(false); }}
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+                          <form onSubmit={handleAddProduct} className="space-y-4">
               <div>
                 <label className="block mb-1 font-medium">Name</label>
                 <input name="name" value={form.name} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
@@ -502,22 +506,28 @@ export default function AdminProducts() {
                 {formLoading ? "Adding..." : "Add Product"}
               </button>
             </form>
+            </div>
           </div>
         </div>
       )}
 
       {editModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-4 md:p-6 relative">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl"
-              onClick={() => { closeEditModal(); }}
-              aria-label="Close"
-            >
-              &times;
-            </button>
-            <h2 className="text-xl font-bold mb-4">Edit Product</h2>
-            <form onSubmit={handleEditProduct} className="space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+            <div className="sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold">Edit Product</h2>
+                <button
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                  onClick={() => { closeEditModal(); }}
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <form onSubmit={handleEditProduct} className="space-y-4">
               <div>
                 <label className="block mb-1 font-medium">Name</label>
                 <input name="name" value={editForm.name} onChange={handleEditFormChange} required className="w-full border rounded px-3 py-2" />
@@ -648,6 +658,7 @@ export default function AdminProducts() {
                 {editLoading ? "Saving..." : "Save Changes"}
               </button>
             </form>
+            </div>
           </div>
         </div>
       )}

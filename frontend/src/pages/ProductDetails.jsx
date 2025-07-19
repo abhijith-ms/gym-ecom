@@ -122,14 +122,32 @@ const ProductDetails = () => {
             </div>
             <div>
               <label className="block text-sm mb-1">Quantity</label>
-              <input
-                type="number"
-                min={1}
-                max={product.stock}
-                value={quantity}
-                onChange={e => setQuantity(Number(e.target.value))}
-                className="border rounded px-2 py-1 w-20"
-              />
+              <div className="flex items-center border rounded">
+                <button
+                  type="button"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="px-3 py-1 hover:bg-gray-100 transition-colors disabled:opacity-50"
+                  disabled={quantity <= 1}
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  max={product.stock}
+                  value={quantity}
+                  onChange={e => setQuantity(Number(e.target.value))}
+                  className="w-16 text-center border-x py-1 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                  className="px-3 py-1 hover:bg-gray-100 transition-colors disabled:opacity-50"
+                  disabled={quantity >= product.stock}
+                >
+                  +
+                </button>
+              </div>
             </div>
           </div>
           {product.stock > 0 ? (
