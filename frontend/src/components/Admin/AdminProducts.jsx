@@ -5,7 +5,7 @@ const initialForm = {
   name: "",
   description: "",
   price: "",
-  category: "men",
+  category: "topwear",
   brand: "",
   material: "",
   stock: "",
@@ -98,6 +98,8 @@ export default function AdminProducts() {
       fetchProducts();
     } catch (err) {
       console.error('Error response:', err.response?.data);
+      console.error('Full error:', err);
+      console.error('Form data that failed:', form);
       setFormError(err.response?.data?.message || "Failed to add product");
     } finally {
       setFormLoading(false);
