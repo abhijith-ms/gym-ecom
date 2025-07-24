@@ -39,13 +39,13 @@ const OfferPopup = () => {
     <>
       {/* Overlay */}
       <div 
-        className="fixed inset-0   z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
         onClick={handleClose}
       >
         {/* Popup Content */}
         <div 
           className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative"
-          onClick={(e) => e.stopPropagation()}bg-black bg-opacity-50
+          onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
           <button

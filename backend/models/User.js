@@ -26,7 +26,13 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: [true, 'Please provide your phone number']
+    required: [true, 'Please provide your phone number'],
+    validate: {
+      validator: function(v) {
+        return /^[6-9]\d{9}$/.test(v.replace(/\D/g, ''));
+      },
+      message: 'Please provide a valid Indian mobile number'
+    }
   },
   address: {
     street: String,
@@ -47,6 +53,15 @@ const userSchema = new mongoose.Schema({
   isEmailVerified: {
     type: Boolean,
     default: false
+  },
+  emailVerificationCode: String,
+  emailVerificationExpires: Date,
+  isPhoneVerified: {
+    type: Boolean,
+    default: false
+  },
+  phoneVerifiedAt: {
+    type: Date
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,

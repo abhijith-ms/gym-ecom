@@ -48,6 +48,10 @@ export const authAPI = {
   updateProfile: (userData) => api.put('/auth/profile', userData),
   changePassword: (passwordData) => api.put('/auth/change-password', passwordData),
   forgotPassword: (data) => api.post('/auth/forgot-password', data),
+  sendEmailVerification: () => api.post('/auth/send-email-verification'),
+  verifyEmail: (code) => api.post('/auth/verify-email', { code }),
+  requestEmailChange: (newEmail) => api.post('/auth/request-email-change', { newEmail }),
+  confirmEmailChange: (code) => api.post('/auth/confirm-email-change', { code }),
 };
 
 // Products API

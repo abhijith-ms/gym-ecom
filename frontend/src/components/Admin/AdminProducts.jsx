@@ -361,43 +361,41 @@ export default function AdminProducts() {
 
       {/* Add Product Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
-            <div className="sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold">Add Product</h2>
-                <button
-                  className="text-gray-500 hover:text-gray-700 text-2xl"
-                  onClick={() => { setShowModal(false); }}
-                  aria-label="Close"
-                >
-                  X
-                </button>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-2 md:p-4">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-lg max-h-[95vh] overflow-y-auto relative flex flex-col">
+            <div className="sticky top-0 bg-white border-b px-4 py-3 rounded-t-xl flex items-center justify-between">
+              <h2 className="text-lg font-bold">Add Product</h2>
+              <button
+                className="text-gray-400 hover:text-gray-700 text-xl p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300"
+                onClick={() => { setShowModal(false); }}
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-                          <form onSubmit={handleAddProduct} className="space-y-4">
+            <form onSubmit={handleAddProduct} className="space-y-4 px-4 py-4">
               <div>
                 <label className="block mb-1 font-medium">Name</label>
-                <input name="name" value={form.name} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
+                <input name="name" value={form.name} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 placeholder-gray-400 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none" />
               </div>
               <div>
                 <label className="block mb-1 font-medium">Description</label>
-                <textarea name="description" value={form.description} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
+                <textarea name="description" value={form.description} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 placeholder-gray-400 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none" />
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <div className="flex-1">
                   <label className="block mb-1 font-medium">Price (₹)</label>
-                  <input name="price" type="number" min="0" value={form.price} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
+                  <input name="price" type="number" min="0" value={form.price} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none" />
                 </div>
                 <div className="flex-1">
                   <label className="block mb-1 font-medium">Stock</label>
-                  <input name="stock" type="number" min="0" value={form.stock} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
+                  <input name="stock" type="number" min="0" value={form.stock} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none" />
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <div className="flex-1">
                   <label className="block mb-1 font-medium">Category</label>
-                  <select name="category" value={form.category} onChange={handleFormChange} required className="w-full border rounded px-3 py-2">
+                  <select name="category" value={form.category} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none">
                     {categories.map(cat => (
                       <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
                     ))}
@@ -405,12 +403,12 @@ export default function AdminProducts() {
                 </div>
                 <div className="flex-1">
                   <label className="block mb-1 font-medium">Brand</label>
-                  <input name="brand" value={form.brand} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
+                  <input name="brand" value={form.brand} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none" />
                 </div>
               </div>
               <div>
                 <label className="block mb-1 font-medium">Material</label>
-                <input name="material" value={form.material} onChange={handleFormChange} required className="w-full border rounded px-3 py-2" />
+                <input name="material" value={form.material} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none" />
               </div>
               <div>
                 <label className="block mb-1 font-medium">Images</label>
@@ -419,7 +417,7 @@ export default function AdminProducts() {
                   accept="image/*"
                   multiple
                   onChange={handleAddImages}
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
                 />
                 {imageUploading && <div className="text-blue-600 text-sm mt-1">Uploading...</div>}
                 {form.images && form.images.length > 0 && (
@@ -428,9 +426,15 @@ export default function AdminProducts() {
                       <div key={idx} className="relative w-20 h-20">
                         <img src={img.url} alt="Preview" className="w-20 h-20 object-cover rounded" />
                         <div className="absolute top-1 right-1 flex flex-col gap-1">
-                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === 0} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx-1) }))}>^</button>
-                          <button type="button" className="bg-white rounded p-0.5 shadow" disabled={idx === form.images.length-1} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx+1) }))}>v</button>
-                          <button type="button" className="bg-scars-red text-white rounded p-0.5 shadow" onClick={() => setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}>X</button>
+                          <button type="button" className="bg-white rounded-full p-1 shadow border border-gray-200" disabled={idx === 0} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx-1) }))}>
+                            <span aria-hidden="true">↑</span>
+                          </button>
+                          <button type="button" className="bg-white rounded-full p-1 shadow border border-gray-200" disabled={idx === form.images.length-1} onClick={() => setForm(f => ({ ...f, images: moveImage(f.images, idx, idx+1) }))}>
+                            <span aria-hidden="true">↓</span>
+                          </button>
+                          <button type="button" className="bg-scars-red text-white rounded-full p-1 shadow" onClick={() => setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}>
+                            <span aria-hidden="true">×</span>
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -471,44 +475,44 @@ export default function AdminProducts() {
                         placeholder="Color name"
                         value={color.name}
                         onChange={(e) => updateColor(index, 'name', e.target.value)}
-                        className="flex-1 border rounded px-3 py-2"
+                        className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
                       />
                       <input
                         type="color"
                         value={color.code}
                         onChange={(e) => updateColor(index, 'code', e.target.value)}
-                        className="w-12 h-10 border rounded"
+                        className="w-10 h-10 border rounded"
                       />
                       <button
                         type="button"
                         onClick={() => removeColor(index)}
-                        className="px-2 py-2 bg-scars-red text-white rounded hover:bg-red-700"
+                        className="px-2 py-2 bg-scars-red text-white rounded-full hover:bg-red-700"
+                        aria-label="Remove color"
                       >
-                        X
+                        <span aria-hidden="true">×</span>
                       </button>
                     </div>
                   ))}
                   <button
                     type="button"
                     onClick={addColor}
-                    className="w-full py-2 border-2 border-dashed border-gray-300 rounded hover:border-gray-400 transition"
+                    className="w-full py-2 border-2 border-dashed border-gray-300 rounded-md hover:border-gray-400 transition text-sm"
                   >
                     + Add Color
                   </button>
                 </div>
               </div>
-              {formError && <div className="text-scars-red text-sm">{formError}</div>}
+              {formError && <div className="text-scars-red text-sm text-center">{formError}</div>}
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-60"
+                className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition disabled:opacity-60 text-base"
                 disabled={formLoading}
               >
                 {formLoading ? "Adding..." : "Add Product"}
               </button>
             </form>
-            </div>
           </div>
-        
+        </div>
       )}
 
       {editModal && (

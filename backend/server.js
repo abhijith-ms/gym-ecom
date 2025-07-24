@@ -1,5 +1,8 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import './loadEnv.js';
+
+console.log('TWILIO_ACCOUNT_SID:', process.env.TWILIO_ACCOUNT_SID);
+console.log('TWILIO_AUTH_TOKEN:', process.env.TWILIO_AUTH_TOKEN);
+console.log('TWILIO_PHONE_NUMBER:', process.env.TWILIO_PHONE_NUMBER);
 
 import express from 'express';
 import mongoose from 'mongoose';
@@ -17,6 +20,7 @@ import productRoutes from './routes/products.js';
 import orderRoutes from './routes/orders.js';
 import paymentRoutes from './routes/payments.js';
 import userRoutes from './routes/users.js';
+import smsRoutes from './routes/sms.js';
 
 const app = express();
 
@@ -30,9 +34,12 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Middleware
+const allowedOrigins = [
+  'http://localhost:5173',
+];
+
 app.use(cors({
-  origin: true, // Allow all origins for now
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -51,6 +58,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/sms', smsRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -64,7 +72,8 @@ app.get('/', (req, res) => {
       products: '/api/products',
       orders: '/api/orders',
       payments: '/api/payments',
-      users: '/api/users'
+      users: '/api/users',
+      sms: '/api/sms'
     }
   });
 });
@@ -180,9 +189,5 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
-
+// Razorpay initialization moved to payment routes
 console.log('RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID); 

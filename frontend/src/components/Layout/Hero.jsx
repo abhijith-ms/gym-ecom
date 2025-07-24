@@ -107,21 +107,22 @@ const Hero = () => {
           </div>
         </div>
         {/* Enhanced Navigation Arrows */}
+        {/* Mobile: arrows near bottom, Desktop: arrows centered */}
         <button
-          className="absolute left-4 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 text-white/90 hover:text-scars-red rounded-full p-3 sm:p-4 md:p-5 z-20 bg-black/40 hover:bg-black/60 backdrop-blur-md border-2 border-white/30 pointer-events-auto transition-all duration-300 hover:scale-125 group shadow-2xl"
+          className="absolute left-4 sm:left-6 md:left-8 top-auto sm:top-1/2 bottom-24 sm:bottom-auto -translate-y-0 sm:-translate-y-1/2 text-white/90 hover:text-scars-red rounded-full p-2 sm:p-4 md:p-5 z-20 bg-black/40 hover:bg-black/60 backdrop-blur-md border-2 border-white/30 pointer-events-auto transition-all duration-300 hover:scale-110 sm:hover:scale-125 group shadow-2xl"
           onClick={() => instanceRef.current?.prev()}
           aria-label="Previous slide"
           tabIndex={0}
         >
-          <HiArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-200" />
+          <HiArrowLeft className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-200" />
         </button>
         <button
-          className="absolute right-4 sm:right-6 md:right-8 top-1/2 -translate-y-1/2 text-white/90 hover:text-scars-red rounded-full p-3 sm:p-4 md:p-5 z-20 bg-black/40 hover:bg-black/60 backdrop-blur-md border-2 border-white/30 pointer-events-auto transition-all duration-300 hover:scale-125 group shadow-2xl"
+          className="absolute right-4 sm:right-6 md:right-8 top-auto sm:top-1/2 bottom-24 sm:bottom-auto -translate-y-0 sm:-translate-y-1/2 text-white/90 hover:text-scars-red rounded-full p-2 sm:p-4 md:p-5 z-20 bg-black/40 hover:bg-black/60 backdrop-blur-md border-2 border-white/30 pointer-events-auto transition-all duration-300 hover:scale-110 sm:hover:scale-125 group shadow-2xl"
           onClick={() => instanceRef.current?.next()}
           aria-label="Next slide"
           tabIndex={0}
         >
-          <HiArrowRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-200" />
+          <HiArrowRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-200" />
         </button>
         {/* Enhanced Pagination Dots */}
         <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 lg:bottom-12 left-1/2 -translate-x-1/2 flex gap-3 sm:gap-4 z-20 pointer-events-auto">

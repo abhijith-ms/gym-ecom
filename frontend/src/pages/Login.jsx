@@ -66,21 +66,26 @@ const Login = () => {
                 Email address
               </label>
               <input
-                {...register('email', {
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Invalid email address',
-                  },
+                {...register('email', { 
+                  required: 'Email or phone is required',
+                  validate: value => {
+                    // Accept either email or 10-digit phone number
+                    if (value.includes('@')) {
+                      // Basic email regex
+                      return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) || 'Please enter a valid email address';
+                    } else {
+                      return (/^[6-9]\d{9}$/).test(value.replace(/\D/g, '')) || 'Please enter a valid 10-digit Indian mobile number';
+                    }
+                  }
                 })}
                 id="email"
                 name="email"
-                type="email"
-                autoComplete="email"
+                type="text"
+                autoComplete="username"
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
                   errors.email ? 'border-scars-red' : 'border-gray-300'
                 } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
-                placeholder="Email address"
+                placeholder="Enter your email or phone number"
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-scars-red">{errors.email.message}</p>

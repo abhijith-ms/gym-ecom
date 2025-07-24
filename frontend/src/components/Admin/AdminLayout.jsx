@@ -21,12 +21,12 @@ export default function AdminLayout() {
       <aside className="hidden md:block w-56 bg-gray-900 text-white p-6 space-y-4">
         <h2 className="text-xl font-bold mb-8">Admin Dashboard</h2>
         <div>
-          <Link to="/" className="text-2xl font-bold text-scars-black">
-          <FaHome className="text-white" />
-
+          <Link to="/" className="inline-flex items-center gap-2 text-2xl font-bold text-scars-black hover:text-scars-red transition">
+            <FaHome className="text-white" />
+            <span className="text-base text-white font-medium">Home</span>
           </Link>
         </div>
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-col gap-2 mt-6">
           {navItems.map(item => (
             <Link
               key={item.path}
@@ -40,7 +40,12 @@ export default function AdminLayout() {
       </aside>
       {/* Mobile Topbar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-gray-900 text-white flex items-center justify-between px-4 py-3 shadow">
-        <h2 className="text-lg font-bold">Admin Dashboard</h2>
+        <div className="flex items-center gap-3">
+          <Link to="/" className="inline-flex items-center" aria-label="Home">
+            <FaHome className="h-6 w-6 text-white" />
+          </Link>
+          <h2 className="text-lg font-bold">Admin Dashboard</h2>
+        </div>
         <button onClick={() => setDrawerOpen(true)} aria-label="Open menu">
           <HiBars3BottomRight className="h-7 w-7" />
         </button>
@@ -50,18 +55,22 @@ export default function AdminLayout() {
         <>
           <div className="fixed inset-0 bg-black bg-opacity-40 z-50" onClick={() => setDrawerOpen(false)} />
           <div className="fixed top-0 left-0 w-3/4 sm:w-1/2 h-full bg-gray-900 text-white z-50 shadow-lg flex flex-col">
-            <div className="flex justify-end p-4">
+            <div className="flex justify-between items-center p-4 border-b border-gray-800">
+              <Link to="/" className="inline-flex items-center gap-2" onClick={() => setDrawerOpen(false)}>
+                <FaHome className="h-6 w-6 text-white" />
+                <span className="text-base text-white font-medium">Home</span>
+              </Link>
               <button onClick={() => setDrawerOpen(false)} aria-label="Close menu">
                 <IoMdClose className="h-6 w-6 text-white" />
               </button>
             </div>
-            <nav className="flex flex-col gap-2 px-6">
+            <nav className="flex flex-col gap-2 px-6 mt-4">
               {navItems.map(item => (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={() => setDrawerOpen(false)}
-                  className={`py-2 px-3 rounded hover:bg-gray-700 transition-colors ${location.pathname === item.path ? "bg-gray-700" : ""}`}
+                  className={`py-3 px-3 rounded hover:bg-gray-700 transition-colors text-base ${location.pathname === item.path ? "bg-gray-700" : ""}`}
                 >
                   {item.label}
                 </Link>
