@@ -2,6 +2,11 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import Product from '../models/Product.js';
 import { protect, authorize, optionalAuth } from '../middleware/auth.js';
+import multer from 'multer';
+import cloudinary from '../utils/cloudinary.js';
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -162,7 +167,7 @@ router.get('/:id', async (req, res) => {
 // @desc    Create new product
 // @route   POST /api/products
 // @access  Private/Admin
-router.post('/', protect, authorize('admin'), [
+router.post('/', protect, authorize('admin'), upload.array('images', 5), [
   body('name').notEmpty().withMessage('Product name is required'),
   body('description').notEmpty().withMessage('Product description is required'),
   body('price').isFloat({ min: 0 }).withMessage('Valid price is required'),
@@ -180,7 +185,36 @@ router.post('/', protect, authorize('admin'), [
       });
     }
 
-    const product = await Product.create(req.body);
+    // Handle image uploads
+    let images = [];
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map(file =>
+        cloudinary.uploader.upload_stream({ folder: 'products' }, (error, result) => {
+          if (error) throw error;
+          return {
+            url: result.secure_url,
+            altText: req.body.name || 'Product image'
+          };
+        })
+      );
+      // Wait for all uploads to finish
+      images = await Promise.all(
+        req.files.map(
+          file => new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream({ folder: 'products' }, (error, result) => {
+              if (error) return reject(error);
+              resolve({ url: result.secure_url, altText: req.body.name || 'Product image' });
+            });
+            stream.end(file.buffer);
+          })
+        )
+      );
+    }
+
+    const productData = { ...req.body };
+    if (images.length > 0) productData.images = images;
+
+    const product = await Product.create(productData);
 
     res.status(201).json({
       success: true,
