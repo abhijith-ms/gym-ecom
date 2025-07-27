@@ -39,9 +39,14 @@ router.post('/send-otp', [
     .withMessage('Phone number is required')
     .custom((value) => {
       if (!smsService || !smsService.isConfigured()) {
-        // If SMS service is not available, just validate the format
+        // If SMS service is not available, validate the format more flexibly
         const cleanNumber = value.replace(/[^\d]/g, '');
+        // Handle both 10-digit and 12-digit (with country code) formats
         if (cleanNumber.length === 10 && cleanNumber.match(/^[6-9]/)) {
+          return true;
+        } else if (cleanNumber.length === 12 && cleanNumber.startsWith('91')) {
+          return true;
+        } else if (cleanNumber.length === 13 && cleanNumber.startsWith('91')) {
           return true;
         }
         throw new Error('Please provide a valid Indian mobile number');
@@ -71,7 +76,14 @@ router.post('/send-otp', [
     
     // Handle case when SMS service is not available
     if (!smsService || !smsService.isConfigured()) {
-      const cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, '');
+      let cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, '');
+      
+      // Handle country code: if it's 12 or 13 digits with 91 prefix, extract the 10-digit number
+      if (cleanPhoneNumber.length === 12 && cleanPhoneNumber.startsWith('91')) {
+        cleanPhoneNumber = cleanPhoneNumber.substring(2);
+      } else if (cleanPhoneNumber.length === 13 && cleanPhoneNumber.startsWith('91')) {
+        cleanPhoneNumber = cleanPhoneNumber.substring(2);
+      }
       
       // Check if phone number is already verified (for existing users)
       if (purpose === 'phone_verification') {
@@ -297,7 +309,14 @@ router.post('/resend-otp', [
     
     // Handle case when SMS service is not available
     if (!smsService || !smsService.isConfigured()) {
-      const cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, '');
+      let cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, '');
+      
+      // Handle country code: if it's 12 or 13 digits with 91 prefix, extract the 10-digit number
+      if (cleanPhoneNumber.length === 12 && cleanPhoneNumber.startsWith('91')) {
+        cleanPhoneNumber = cleanPhoneNumber.substring(2);
+      } else if (cleanPhoneNumber.length === 13 && cleanPhoneNumber.startsWith('91')) {
+        cleanPhoneNumber = cleanPhoneNumber.substring(2);
+      }
       
       // Check for recent OTP requests (rate limiting - 2 minutes for resend)
       const recentOTP = await OTP.findOne({
