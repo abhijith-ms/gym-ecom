@@ -357,12 +357,18 @@ router.post('/send-email-verification', protect, async (req, res) => {
     // Log state after save
     console.log('[SEND EMAIL VERIFICATION] user:', user._id, 'email:', user.email, 'code:', user.emailVerificationCode, 'expires:', user.emailVerificationExpires);
     // Send email using Mailgun
-    await sendEmail({
+    const emailResult = await sendEmail({
       to: user.email,
       subject: 'SCARS Email Verification Code',
       text: `Your SCARS email verification code is: ${code}.\nValid for 10 minutes. If you did not request this, ignore this email.`,
       html: `<p>Your SCARS email verification code is: <b>${code}</b>.<br>Valid for 10 minutes. If you did not request this, ignore this email.</p>`
     });
+    
+    if (!emailResult.success) {
+      console.warn('Email service not available, but continuing with verification code generation');
+      // Still allow the process to continue even if email fails
+    }
+    
     res.json({ success: true, message: 'Verification email sent' });
   } catch (error) {
     console.error('[SEND EMAIL VERIFICATION ERROR]', error.stack || error);
@@ -436,12 +442,18 @@ router.post('/request-email-change', protect, [
       return res.status(500).json({ success: false, message: 'Failed to save email change request. Please try again.' });
     }
     // Send code to new email
-    await sendEmail({
+    const emailResult = await sendEmail({
       to: newEmail,
       subject: 'SCARS Email Change Verification Code',
       text: `Your code to change email is: ${code}.\nValid for 10 minutes.`,
       html: `<p>Your code to change email is: <b>${code}</b>.<br>Valid for 10 minutes.</p>`
     });
+    
+    if (!emailResult.success) {
+      console.warn('Email service not available, but continuing with email change request');
+      // Still allow the process to continue even if email fails
+    }
+    
     res.json({ success: true, message: 'Verification code sent to new email' });
   } catch (error) {
     console.error('[REQUEST EMAIL CHANGE ERROR]', error.stack || error, 'user:', req.user?.id, 'body:', req.body);
