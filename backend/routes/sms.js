@@ -22,8 +22,9 @@ const checkSmsService = (req, res, next) => {
   if (!smsService || !smsService.isConfigured()) {
     return res.status(503).json({
       success: false,
-      message: 'SMS service is not configured. Please try again later.',
-      error: 'SMS_SERVICE_NOT_CONFIGURED'
+      message: 'SMS service is not configured. Please contact support or try again later.',
+      error: 'SMS_SERVICE_NOT_CONFIGURED',
+      code: 'SMS_NOT_AVAILABLE'
     });
   }
   next();
@@ -33,11 +34,18 @@ const checkSmsService = (req, res, next) => {
 // @route   POST /api/sms/send-otp
 // @access  Public (for signup) / Private (for profile update)
 router.post('/send-otp', [
-  checkSmsService,
   body('phoneNumber')
     .notEmpty()
     .withMessage('Phone number is required')
     .custom((value) => {
+      if (!smsService || !smsService.isConfigured()) {
+        // If SMS service is not available, just validate the format
+        const cleanNumber = value.replace(/[^\d]/g, '');
+        if (cleanNumber.length === 10 && cleanNumber.match(/^[6-9]/)) {
+          return true;
+        }
+        throw new Error('Please provide a valid Indian mobile number');
+      }
       const cleanNumber = smsService.validatePhoneNumber(value);
       if (!cleanNumber) {
         throw new Error('Please provide a valid Indian mobile number');
@@ -60,6 +68,53 @@ router.post('/send-otp', [
     }
 
     const { phoneNumber, purpose = 'phone_verification' } = req.body;
+    
+    // Handle case when SMS service is not available
+    if (!smsService || !smsService.isConfigured()) {
+      const cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, '');
+      
+      // Check if phone number is already verified (for existing users)
+      if (purpose === 'phone_verification') {
+        const existingUser = await User.findOne({ 
+          phone: cleanPhoneNumber, 
+          isPhoneVerified: true 
+        });
+        
+        if (existingUser) {
+          return res.status(400).json({
+            success: false,
+            message: 'Phone number is already verified'
+          });
+        }
+      }
+
+      // For development/testing: auto-verify phone when SMS service is not available
+      const testOTP = '123456'; // Fixed test OTP
+      
+      // Save test OTP to database
+      const otpRecord = new OTP({
+        phoneNumber: cleanPhoneNumber,
+        otp: testOTP,
+        purpose,
+        userId: req.user?.id || null
+      });
+
+      await otpRecord.save();
+
+      return res.status(200).json({
+        success: true,
+        message: 'SMS service not configured. Using test OTP: 123456',
+        data: {
+          phoneNumber: cleanPhoneNumber,
+          messageId: 'test-message-id',
+          expiresIn: '10 minutes',
+          testMode: true,
+          testOTP: '123456'
+        }
+      });
+    }
+
+    // Normal SMS service flow
     const cleanPhoneNumber = smsService.validatePhoneNumber(phoneNumber);
 
     // Check if phone number is already verified (for existing users)
@@ -224,7 +279,6 @@ router.post('/verify-otp', [
 // @route   POST /api/sms/resend-otp
 // @access  Public
 router.post('/resend-otp', [
-  checkSmsService,
   body('phoneNumber')
     .notEmpty()
     .withMessage('Phone number is required')
@@ -240,6 +294,50 @@ router.post('/resend-otp', [
     }
 
     const { phoneNumber } = req.body;
+    
+    // Handle case when SMS service is not available
+    if (!smsService || !smsService.isConfigured()) {
+      const cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, '');
+      
+      // Check for recent OTP requests (rate limiting - 2 minutes for resend)
+      const recentOTP = await OTP.findOne({
+        phoneNumber: cleanPhoneNumber,
+        createdAt: { $gte: new Date(Date.now() - 120000) } // Last 2 minutes
+      });
+
+      if (recentOTP) {
+        return res.status(429).json({
+          success: false,
+          message: 'Please wait 2 minutes before resending OTP'
+        });
+      }
+
+      // For development/testing: auto-verify phone when SMS service is not available
+      const testOTP = '123456'; // Fixed test OTP
+      
+      // Save new test OTP to database
+      const otpRecord = new OTP({
+        phoneNumber: cleanPhoneNumber,
+        otp: testOTP,
+        purpose: 'phone_verification'
+      });
+
+      await otpRecord.save();
+
+      return res.status(200).json({
+        success: true,
+        message: 'SMS service not configured. Using test OTP: 123456',
+        data: {
+          phoneNumber: cleanPhoneNumber,
+          messageId: 'test-message-id',
+          expiresIn: '10 minutes',
+          testMode: true,
+          testOTP: '123456'
+        }
+      });
+    }
+
+    // Normal SMS service flow
     const cleanPhoneNumber = smsService.validatePhoneNumber(phoneNumber);
 
     if (!cleanPhoneNumber) {
