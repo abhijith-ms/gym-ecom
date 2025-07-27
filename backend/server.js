@@ -137,7 +137,7 @@ app.post('/api/create-admin', async (req, res) => {
       email,
       password,
       role: 'admin',
-      phone: '+1234567890',
+      phone: '+919876543210',
       address: {
         street: 'Admin Address',
         city: 'Admin City',

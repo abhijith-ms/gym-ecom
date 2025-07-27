@@ -134,7 +134,7 @@ const seedData = async () => {
       name: 'Admin User',
       email: 'admin@gym.com',
       password: 'admin123',
-      phone: '+1234567890',
+      phone: '+919876543210',
       role: 'admin',
       address: {
         street: '123 Admin St',
@@ -151,7 +151,7 @@ const seedData = async () => {
       name: 'John Doe',
       email: 'john@gym.com',
       password: 'user123',
-      phone: '+1987654321',
+      phone: '+919876543211',
       role: 'user',
       address: {
         street: '456 User Ave',
