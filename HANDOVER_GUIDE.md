@@ -162,6 +162,12 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 3. **Email/SMS:** Currently in fallback mode - configure for full functionality
 4. **Images:** Using Cloudinary - ensure you have proper storage plan
 
+### 📱 SMS OTP Fallback System
+- **Current Status:** SMS service (Twilio) is not configured in production
+- **Fallback:** System automatically provides test OTP `123456` for all phone numbers
+- **User Experience:** Users can still verify their phone numbers during signup
+- **To Enable Real SMS:** Configure Twilio credentials in Railway environment variables
+
 ## 📚 API Documentation
 
 ### Key Endpoints
