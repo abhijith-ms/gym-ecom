@@ -35,13 +35,13 @@ const OrderConfirmation = () => {
           {order.orderItems.map((item, idx) => (
             <li key={idx} className="flex justify-between mb-2">
               <span>{item.name} x {item.quantity}</span>
-              <span>${(item.price * item.quantity).toFixed(2)}</span>
+              <span>₹{(item.price * item.quantity).toFixed(2)}</span>
             </li>
           ))}
         </ul>
         <div className="flex justify-between font-bold text-lg">
           <span>Total:</span>
-          <span>${order.totalPrice.toFixed(2)}</span>
+          <span>₹{order.totalPrice.toFixed(2)}</span>
         </div>
       </div>
       <Link to="/orders" className="inline-block bg-black text-white py-3 px-8 rounded-lg font-semibold hover:bg-gray-800 transition">

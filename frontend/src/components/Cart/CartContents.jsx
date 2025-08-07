@@ -54,7 +54,7 @@ const CartContents = () => {
                   </div>
                </div>
                <div className="text-right">
-                  <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                  <p className="font-medium">₹{(item.price * item.quantity).toFixed(2)}</p>
                   <button 
                      onClick={() => removeItem(item.product._id, item.size)}
                      className="mt-2 hover:text-scars-red"

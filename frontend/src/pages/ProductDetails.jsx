@@ -95,9 +95,9 @@ const ProductDetails = () => {
         <div className="md:w-1/2 flex flex-col gap-4">
           <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
           <p className="text-lg text-gray-600 mb-1">{product.brand}</p>
-          <p className="text-xl text-gray-800 font-semibold mb-2">${product.price}</p>
+          <p className="text-xl text-gray-800 font-semibold mb-2">₹{product.price}</p>
           {product.originalPrice && (
-            <p className="text-md text-gray-400 line-through mb-2">${product.originalPrice}</p>
+            <p className="text-md text-gray-400 line-through mb-2">₹{product.originalPrice}</p>
           )}
           <p className="mb-4">{product.description}</p>
           {isLowStock && (

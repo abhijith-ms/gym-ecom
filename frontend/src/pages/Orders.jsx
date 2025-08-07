@@ -34,7 +34,7 @@ const Orders = () => {
               <div className="font-mono text-sm text-gray-500 mb-1">Order ID: {order._id}</div>
               <div className="mb-2">Placed: {new Date(order.createdAt).toLocaleString()}</div>
               <div className="mb-2">Status: <span className="font-semibold">{order.status}</span></div>
-              <div className="mb-2">Total: <span className="font-bold">${order.totalPrice.toFixed(2)}</span></div>
+              <div className="mb-2">Total: <span className="font-bold">₹{order.totalPrice.toFixed(2)}</span></div>
             </div>
             <div className="flex flex-col gap-2 md:items-end">
               <Link to={`/order-confirmation/${order._id}`} className="text-indigo-600 hover:underline font-semibold">View Details</Link>

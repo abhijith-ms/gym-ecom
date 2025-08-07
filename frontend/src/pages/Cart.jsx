@@ -55,14 +55,14 @@ const Cart = () => {
               </button>
             </div>
             <div className="text-right">
-              <p className="font-semibold text-lg mb-2">${(item.price * item.quantity).toFixed(2)}</p>
+              <p className="font-semibold text-lg mb-2">₹{(item.price * item.quantity).toFixed(2)}</p>
             </div>
           </div>
         ))}
       </div>
       <div className="flex justify-between items-center mt-8 border-t pt-6">
         <span className="text-xl font-bold">Total:</span>
-        <span className="text-xl font-bold">${getTotalPrice().toFixed(2)}</span>
+        <span className="text-xl font-bold">₹{getTotalPrice().toFixed(2)}</span>
       </div>
       <div className="mt-8 text-right">
         <button

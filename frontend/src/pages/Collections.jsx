@@ -69,7 +69,7 @@ const Collections = () => {
               <h3 className="font-semibold text-lg mb-1">{product.name}</h3>
               <p className="text-gray-600 mb-2">{product.brand}</p>
               <div className="flex items-center justify-between mt-auto">
-                <span className="text-xl font-bold">${product.price}</span>
+                <span className="text-xl font-bold">₹{product.price}</span>
                 {product.isFeatured && (
                   <span className="bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded">Featured</span>
                 )}

@@ -34,7 +34,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
          <div className='p-4 bg-white sticky bottom-0 border-t'>
             <div className='flex justify-between items-center mb-4'>
                <span className='text-lg font-semibold'>Total:</span>
-               <span className='text-lg font-semibold'>${getTotalPrice().toFixed(2)}</span>
+               <span className='text-lg font-semibold'>₹{getTotalPrice().toFixed(2)}</span>
             </div>
             <Link 
                to="/checkout" 

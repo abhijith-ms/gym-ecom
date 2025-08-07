@@ -29,7 +29,7 @@ const Wishlist = () => {
             <h3 className="font-semibold text-lg mb-1 cursor-pointer" onClick={() => navigate(`/products/${item._id}`)}>{item.name}</h3>
             <p className="text-gray-600 mb-2">{item.brand}</p>
             <div className="flex items-center justify-between mt-auto">
-              <span className="text-xl font-bold">${item.price}</span>
+              <span className="text-xl font-bold">₹{item.price}</span>
               <button
                 onClick={() => removeItem(item._id)}
                 className="text-scars-red hover:underline text-sm"
