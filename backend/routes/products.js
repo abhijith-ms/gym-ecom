@@ -173,8 +173,7 @@ router.post('/', protect, authorize('admin'), upload.array('images', 5), [
   body('price').isFloat({ min: 0 }).withMessage('Valid price is required'),
   body('category').isIn(['topwear', 'bottomwear']).withMessage('Valid category is required'),
   body('brand').notEmpty().withMessage('Brand is required'),
-  body('material').notEmpty().withMessage('Material is required'),
-  body('stock').isInt({ min: 0 }).withMessage('Valid stock quantity is required')
+  body('material').notEmpty().withMessage('Material is required')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -211,7 +210,20 @@ router.post('/', protect, authorize('admin'), upload.array('images', 5), [
       );
     }
 
-    const productData = { ...req.body };
+    // Process size-specific stock
+    const stockData = {};
+    const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+    
+    availableSizes.forEach(size => {
+      const stockKey = `stock_${size}`;
+      stockData[size] = parseInt(req.body[stockKey]) || 0;
+    });
+
+    const productData = { 
+      ...req.body,
+      stock: stockData
+    };
+    
     if (images.length > 0) productData.images = images;
 
     const product = await Product.create(productData);

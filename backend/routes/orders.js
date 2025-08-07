@@ -48,15 +48,16 @@ router.post('/', protect, [
         });
       }
 
-      if (product.stock < item.quantity) {
+      // Check if the specific size is in stock
+      if (!product.stock[item.size] || product.stock[item.size] < item.quantity) {
         return res.status(400).json({
           success: false,
-          message: `Insufficient stock for ${product.name}`
+          message: `Insufficient stock for ${product.name} in size ${item.size}. Available: ${product.stock[item.size] || 0}`
         });
       }
 
-      // Update stock
-      product.stock -= item.quantity;
+      // Update stock for specific size
+      product.stock[item.size] -= item.quantity;
       await product.save();
 
       itemsPrice += product.price * item.quantity;

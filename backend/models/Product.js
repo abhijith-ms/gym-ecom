@@ -75,10 +75,13 @@ const productSchema = new mongoose.Schema({
     altText: String
   }],
   stock: {
-    type: Number,
-    required: [true, 'Please provide stock quantity'],
-    min: [0, 'Stock cannot be negative'],
-    default: 0
+    XS: { type: Number, default: 0, min: [0, 'Stock cannot be negative'] },
+    S: { type: Number, default: 0, min: [0, 'Stock cannot be negative'] },
+    M: { type: Number, default: 0, min: [0, 'Stock cannot be negative'] },
+    L: { type: Number, default: 0, min: [0, 'Stock cannot be negative'] },
+    XL: { type: Number, default: 0, min: [0, 'Stock cannot be negative'] },
+    XXL: { type: Number, default: 0, min: [0, 'Stock cannot be negative'] },
+    XXXL: { type: Number, default: 0, min: [0, 'Stock cannot be negative'] }
   },
   ratings: {
     type: Number,
@@ -116,5 +119,20 @@ const productSchema = new mongoose.Schema({
 
 // Index for search functionality
 productSchema.index({ name: 'text', description: 'text', brand: 'text' });
+
+// Virtual for total stock
+productSchema.virtual('totalStock').get(function() {
+  return Object.values(this.stock).reduce((total, quantity) => total + quantity, 0);
+});
+
+// Method to check if a specific size is in stock
+productSchema.methods.isSizeInStock = function(size, quantity = 1) {
+  return this.stock[size] >= quantity;
+};
+
+// Method to get available sizes (sizes with stock > 0)
+productSchema.methods.getAvailableSizes = function() {
+  return this.sizes.filter(size => this.stock[size] > 0);
+};
 
 export default mongoose.model('Product', productSchema); 
