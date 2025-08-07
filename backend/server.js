@@ -38,7 +38,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'https://gym-ecom-2o9mkirty-abhijith-mss-projects.vercel.app',
   'https://gym-ecom.vercel.app',
-  'https://gym-ecom-git-main-abhijith-mss-projects.vercel.app'
+  'https://gym-ecom-git-main-abhijith-mss-projects.vercel.app',
+  'https://gym-ecom-kmg59nnfg-abhijith-mss-projects.vercel.app'
 ];
 
 app.use(cors({
