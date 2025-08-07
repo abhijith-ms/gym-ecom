@@ -6,25 +6,30 @@ import { toast } from 'react-hot-toast';
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { addItem } = useCartStore(state => state.addItem);
+  const { wishlist, addItem: addWishlist, removeItem: removeWishlist } = useWishlistStore();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(0);
-  const navigate = useNavigate();
-  const addItem = useCartStore(state => state.addItem);
-  const { items: wishlist, addItem: addWishlist, removeItem: removeWishlist } = useWishlistStore();
+
+  // Calculate total stock and check if selected size is in stock
+  const totalStock = product ? Object.values(product.stock || {}).reduce((sum, qty) => sum + (qty || 0), 0) : 0;
+  const selectedSizeStock = product && selectedSize ? (product.stock?.[selectedSize] || 0) : 0;
+  const isSelectedSizeInStock = selectedSizeStock > 0;
 
   useEffect(() => {
     const fetchProduct = async () => {
-      setLoading(true);
       try {
         const res = await productsAPI.getById(id);
         setProduct(res.data.product);
         setSelectedSize(res.data.product.sizes?.[0] || '');
         setSelectedColor(res.data.product.colors?.[0]?.name || '');
-      } catch (err) {
+      } catch (error) {
+        console.error('Error fetching product:', error);
         setProduct(null);
       } finally {
         setLoading(false);
@@ -33,7 +38,8 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  const isWishlisted = wishlist.some(w => w._id === product._id);
+  const isWishlisted = wishlist.some(w => w._id === product?._id);
+
   const handleWishlist = () => {
     if (isWishlisted) {
       removeWishlist(product._id);
@@ -90,9 +96,9 @@ const ProductDetails = () => {
             <p className="text-md text-gray-400 line-through mb-2">${product.originalPrice}</p>
           )}
           <p className="mb-4">{product.description}</p>
-          {product.stock > 0 && product.stock < 5 && (
+          {totalStock > 0 && totalStock < 5 && (
             <p className="text-red-600 text-sm font-medium mb-2">
-              ⚠️ Only {product.stock} left in stock!
+              ⚠️ Only {totalStock} left in stock!
             </p>
           )}
           <div className="flex gap-4 mb-4">
@@ -103,8 +109,8 @@ const ProductDetails = () => {
                 onChange={e => setSelectedSize(e.target.value)}
                 className="border rounded px-2 py-1"
               >
-                {product.sizes?.map(size => (
-                  <option key={size} value={size}>{size}</option>
+                {product.sizes?.filter(size => product.stock?.[size] > 0).map(size => (
+                  <option key={size} value={size}>{size} ({product.stock[size]} available)</option>
                 ))}
               </select>
             </div>
@@ -134,23 +140,23 @@ const ProductDetails = () => {
                 <input
                   type="number"
                   min={1}
-                  max={product.stock}
+                  max={selectedSizeStock}
                   value={quantity}
                   onChange={e => setQuantity(Number(e.target.value))}
                   className="w-16 text-center border-x py-1 focus:outline-none"
                 />
                 <button
                   type="button"
-                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                  onClick={() => setQuantity(Math.min(selectedSizeStock, quantity + 1))}
                   className="px-3 py-1 hover:bg-gray-100 transition-colors disabled:opacity-50"
-                  disabled={quantity >= product.stock}
+                  disabled={quantity >= selectedSizeStock}
                 >
                   +
                 </button>
               </div>
             </div>
           </div>
-          {product.stock > 0 ? (
+          {isSelectedSizeInStock ? (
             <button
               onClick={handleAddToCart}
               className="bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition mb-2"

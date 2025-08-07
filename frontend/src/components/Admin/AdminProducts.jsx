@@ -490,30 +490,6 @@ export default function AdminProducts() {
                 )}
               </div>
               <div>
-                <label className="block mb-1 font-medium">Sizes</label>
-                <div className="flex flex-wrap gap-2">
-                  {sizeOptions.map(size => (
-                    <label key={size} className="flex items-center gap-1">
-                      <input
-                        type="checkbox"
-                        value={size}
-                        checked={form.sizes?.includes(size) || false}
-                        onChange={e => {
-                          const checked = e.target.checked;
-                          setForm(f => ({
-                            ...f,
-                            sizes: checked
-                              ? [...(f.sizes || []), size]
-                              : (f.sizes || []).filter(s => s !== size)
-                          }));
-                        }}
-                      />
-                      {size}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div>
                 <label className="block mb-1 font-medium">Colors</label>
                 <div className="space-y-2">
                   {form.colors.map((color, index) => (
@@ -655,30 +631,6 @@ export default function AdminProducts() {
                     ))}
                   </div>
                 )}
-              </div>
-              <div>
-                <label className="block mb-1 font-medium">Sizes</label>
-                <div className="flex flex-wrap gap-2">
-                  {sizeOptions.map(size => (
-                    <label key={size} className="flex items-center gap-1">
-                      <input
-                        type="checkbox"
-                        value={size}
-                        checked={editForm.sizes?.includes(size) || false}
-                        onChange={e => {
-                          const checked = e.target.checked;
-                          setEditForm(f => ({
-                            ...f,
-                            sizes: checked
-                              ? [...(f.sizes || []), size]
-                              : (f.sizes || []).filter(s => s !== size)
-                          }));
-                        }}
-                      />
-                      {size}
-                    </label>
-                  ))}
-                </div>
               </div>
               <div>
                 <label className="block mb-1 font-medium">Colors</label>

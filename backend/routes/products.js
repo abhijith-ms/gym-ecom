@@ -219,9 +219,13 @@ router.post('/', protect, authorize('admin'), upload.array('images', 5), [
       stockData[size] = parseInt(req.body[stockKey]) || 0;
     });
 
+    // Automatically set sizes based on which sizes have stock
+    const sizesWithStock = availableSizes.filter(size => stockData[size] > 0);
+
     const productData = { 
       ...req.body,
-      stock: stockData
+      stock: stockData,
+      sizes: sizesWithStock
     };
     
     if (images.length > 0) productData.images = images;
@@ -256,7 +260,25 @@ router.put('/:id', protect, authorize('admin'), async (req, res) => {
       });
     }
 
-    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    // Process size-specific stock for updates
+    const stockData = {};
+    const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+    
+    availableSizes.forEach(size => {
+      const stockKey = `stock_${size}`;
+      stockData[size] = parseInt(req.body[stockKey]) || 0;
+    });
+
+    // Automatically set sizes based on which sizes have stock
+    const sizesWithStock = availableSizes.filter(size => stockData[size] > 0);
+
+    const updateData = {
+      ...req.body,
+      stock: stockData,
+      sizes: sizesWithStock
+    };
+
+    product = await Product.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true
     });

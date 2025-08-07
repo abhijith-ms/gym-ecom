@@ -106,13 +106,16 @@ const NewArrivals = () => {
                   </div>
                   
                   {/* Stock Status */}
-                  {product.stock <= 5 && product.stock > 0 && (
-                    <div className="absolute top-6 right-6">
-                      <span className="bg-orange-500 text-white px-3 py-2 rounded-full text-sm font-bold shadow-lg">
-                        Only {product.stock} left
-                      </span>
-                    </div>
-                  )}
+                  {(() => {
+                    const totalStock = Object.values(product.stock || {}).reduce((sum, qty) => sum + (qty || 0), 0);
+                    return totalStock <= 5 && totalStock > 0 ? (
+                      <div className="absolute top-6 right-6">
+                        <span className="bg-orange-500 text-white px-3 py-2 rounded-full text-sm font-bold shadow-lg">
+                          Only {totalStock} left
+                        </span>
+                      </div>
+                    ) : null;
+                  })()}
                 </div>
                 
                 {/* Product Info */}
