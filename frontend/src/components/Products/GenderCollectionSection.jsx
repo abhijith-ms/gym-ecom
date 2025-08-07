@@ -1,6 +1,6 @@
-import mensCollectionImage from "../../assets/mens-collection.webp"
+import mensCollectionImage from "../../assets/product/Scars957.webp"
 import { Link } from "react-router-dom"
-import featuredImg from "../../assets/featured.webp";
+import featuredImg from "../../assets/product/Scars904.webp";
 
 const GenderCollectionSection = () => {
   return (

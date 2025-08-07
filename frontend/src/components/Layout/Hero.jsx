@@ -4,11 +4,13 @@ import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi2";
 import scarsLogo from "../../assets/scars.png";
-import hero1 from "../../assets/hero1.jpg";
-import hero2 from "../../assets/hero2.jpg";
-import hero3 from "../../assets/hero3.jpg";
+import hero1 from "../../assets/banner/Scars939.webp";
+import hero2 from "../../assets/banner/Scars918.webp";
+import hero3 from "../../assets/banner/Scars880.webp";
+import hero4 from "../../assets/banner/Scars555.webp";
+import hero5 from "../../assets/banner/Scars287.webp";
 
-const images = [hero1, hero2, hero3];
+const images = [hero1, hero2, hero3, hero4, hero5];
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = React.useState(0);
