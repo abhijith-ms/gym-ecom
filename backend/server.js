@@ -36,13 +36,14 @@ app.use(limiter);
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://gym-ecom-2o9mkirty-abhijith-mss-projects.vercel.app',
   'https://gym-ecom.vercel.app',
+  /^https:\/\/gym-ecom-.*\.vercel\.app$/, // Wildcard for preview URLs
   'https://gym-ecom-git-main-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-kmg59nnfg-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-g7n25n0p7-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-ittmmu26j-abhijith-mss-projects.vercel.app',
-  'https://gym-ecom-aeol07lp9-abhijith-mss-projects.vercel.app'
+  'https://gym-ecom-aeol07lp9-abhijith-mss-projects.vercel.app',
+  'https://gym-ecom-f77xp1meh-abhijith-mss-projects.vercel.app'
 ];
 
 app.use(cors({
