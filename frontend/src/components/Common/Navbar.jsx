@@ -8,7 +8,6 @@ import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { FiLogOut, FiHeart } from "react-icons/fi";
-
 import SearchBar from "./SearchBar";
 import { useAuthStore, useCartStore } from "../../store/useStore";
 import scarsLogo from "../../assets/scars.png";
@@ -105,7 +104,7 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 hidden md:flex">
               <Link 
                 to="/login" 
                 className="text-sm text-scars-black hover:text-scars-red px-3 py-2 rounded-lg hover:bg-scars-red/5

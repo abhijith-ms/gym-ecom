@@ -6,7 +6,7 @@ const USPRow = () => (
       <div className="flex flex-col items-center text-center">
         <FaShippingFast className="text-3xl text-black mb-2" />
         <span className="font-semibold">Fast Shipping</span>
-        <span className="text-gray-500 text-sm">All Kerala Delivery</span>
+        <span className="text-gray-500 text-sm">All India Delivery</span>
       </div>
       <div className="flex flex-col items-center text-center">
         <FaTshirt className="text-3xl text-black mb-2" />

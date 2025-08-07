@@ -73,11 +73,12 @@ const Footer = () => (
         <div className="text-center md:text-left">
           <h4 className="text-xl sm:text-2xl font-bold mb-6 text-white">Quick Links</h4>
           <div className="space-y-3">
-            <Link to="/" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform">Home</Link>
-            <Link to="/collections?category=topwear" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform">Topwear</Link>
-            <Link to="/collections?category=bottomwear" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform">Bottomwear</Link>
-            <Link to="/collections" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform">All Products</Link>
-            <Link to="/profile" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform">My Account</Link>
+            {/* Each link is a real router Link, accessible and clickable */}
+            <Link to="/" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>Home</Link>
+            <Link to="/collections?category=topwear" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>Topwear</Link>
+            <Link to="/collections?category=bottomwear" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>Bottomwear</Link>
+            <Link to="/collections" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>All Products</Link>
+            <Link to="/profile" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>My Account</Link>
           </div>
         </div>
       </div>
