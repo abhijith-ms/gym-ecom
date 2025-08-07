@@ -61,13 +61,12 @@ export const useCartStore = create(
       items: [],
       isOpen: false,
 
-      addItem: (product, quantity = 1, size, color) => {
+      addItem: (product, quantity = 1, size) => {
         const { items } = get();
         const existingItem = items.find(
           item => 
             item.product._id === product._id && 
-            item.size === size && 
-            item.color === color
+            item.size === size
         );
 
         if (existingItem) {
@@ -84,32 +83,29 @@ export const useCartStore = create(
               product,
               quantity,
               size,
-              color,
               price: product.price,
             }],
           });
         }
       },
 
-      removeItem: (productId, size, color) => {
+      removeItem: (productId, size) => {
         const { items } = get();
         set({
           items: items.filter(
             item => 
               !(item.product._id === productId && 
-                item.size === size && 
-                item.color === color)
+                item.size === size)
           ),
         });
       },
 
-      updateQuantity: (productId, size, color, quantity) => {
+      updateQuantity: (productId, size, quantity) => {
         const { items } = get();
         set({
           items: items.map(item =>
             item.product._id === productId && 
-            item.size === size && 
-            item.color === color
+            item.size === size
               ? { ...item, quantity: Math.max(0, Math.min(quantity, item.product.stock)) }
               : item
           ),

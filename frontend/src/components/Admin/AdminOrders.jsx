@@ -132,7 +132,7 @@ export default function AdminOrders() {
                     <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
                     <div className="flex-1">
                       <div className="font-medium">{item.name}</div>
-                      <div className="text-xs text-gray-500">Qty: {item.quantity} | Size: {item.size} | Color: {item.color}</div>
+                      <div className="text-xs text-gray-500">Qty: {item.quantity} | Size: {item.size}</div>
                     </div>
                     <div className="font-semibold">₹{item.price}</div>
                   </li>

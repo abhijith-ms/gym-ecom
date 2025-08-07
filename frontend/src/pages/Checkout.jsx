@@ -65,7 +65,6 @@ const Checkout = () => {
         name: item.product.name,
         quantity: item.quantity,
         size: item.size,
-        color: item.color,
         price: item.price,
         image: item.product.images[0]?.url || '',
       }));

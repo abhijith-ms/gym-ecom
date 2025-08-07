@@ -16,8 +16,7 @@ const initialForm = {
   stock_XXL: "",
   stock_XXXL: "",
   images: [],
-  sizes: [],
-  colors: []
+  sizes: []
 };
 
 const categories = ["topwear", "bottomwear"];
@@ -71,30 +70,6 @@ export default function AdminProducts() {
     setForm(f => ({ ...f, [name]: value }));
   };
 
-  // Color management functions
-  const addColor = () => {
-    setForm(f => ({
-      ...f,
-      colors: [...f.colors, { name: '', code: '#000000' }]
-    }));
-  };
-
-  const removeColor = (index) => {
-    setForm(f => ({
-      ...f,
-      colors: f.colors.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateColor = (index, field, value) => {
-    setForm(f => ({
-      ...f,
-      colors: f.colors.map((color, i) => 
-        i === index ? { ...color, [field]: value } : color
-      )
-    }));
-  };
-
   // Add Product Modal: handle image upload
   const handleAddImages = async e => {
     const files = Array.from(e.target.files);
@@ -124,8 +99,7 @@ export default function AdminProducts() {
         stock_XXL: parseInt(form.stock_XXL, 10) || 0,
         stock_XXXL: parseInt(form.stock_XXXL, 10) || 0,
         images: form.images,
-        sizes: form.sizes,
-        colors: form.colors
+        sizes: form.sizes
       };
       console.log('Form data being sent:', payload);
       console.log('Form state:', form);
@@ -160,8 +134,7 @@ export default function AdminProducts() {
       stock_XXL: product.stock?.XXL || 0,
       stock_XXXL: product.stock?.XXXL || 0,
       images: product.images || [],
-      sizes: product.sizes || [],
-      colors: product.colors || []
+      sizes: product.sizes || []
     });
     setEditId(product._id);
     setEditModal(true);
@@ -178,30 +151,6 @@ export default function AdminProducts() {
   const handleEditFormChange = e => {
     const { name, value } = e.target;
     setEditForm(f => ({ ...f, [name]: value }));
-  };
-
-  // Edit form color management functions
-  const addEditColor = () => {
-    setEditForm(f => ({
-      ...f,
-      colors: [...f.colors, { name: '', code: '#000000' }]
-    }));
-  };
-
-  const removeEditColor = (index) => {
-    setEditForm(f => ({
-      ...f,
-      colors: f.colors.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateEditColor = (index, field, value) => {
-    setEditForm(f => ({
-      ...f,
-      colors: f.colors.map((color, i) => 
-        i === index ? { ...color, [field]: value } : color
-      )
-    }));
   };
 
   // Edit Product Modal: handle image upload
@@ -233,8 +182,7 @@ export default function AdminProducts() {
         stock_XXL: parseInt(editForm.stock_XXL, 10) || 0,
         stock_XXXL: parseInt(editForm.stock_XXXL, 10) || 0,
         images: editForm.images,
-        sizes: editForm.sizes,
-        colors: editForm.colors
+        sizes: editForm.sizes
       };
       await api.put(`/products/${editId}`, payload);
       closeEditModal();
@@ -489,43 +437,6 @@ export default function AdminProducts() {
                   </div>
                 )}
               </div>
-              <div>
-                <label className="block mb-1 font-medium">Colors</label>
-                <div className="space-y-2">
-                  {form.colors.map((color, index) => (
-                    <div key={index} className="flex gap-2 items-center">
-                      <input
-                        type="text"
-                        placeholder="Color name"
-                        value={color.name}
-                        onChange={(e) => updateColor(index, 'name', e.target.value)}
-                        className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
-                      />
-                      <input
-                        type="color"
-                        value={color.code}
-                        onChange={(e) => updateColor(index, 'code', e.target.value)}
-                        className="w-10 h-10 border rounded"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeColor(index)}
-                        className="px-2 py-2 bg-scars-red text-white rounded-full hover:bg-red-700"
-                        aria-label="Remove color"
-                      >
-                        <span aria-hidden="true">×</span>
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={addColor}
-                    className="w-full py-2 border-2 border-dashed border-gray-300 rounded-md hover:border-gray-400 transition text-sm"
-                  >
-                    + Add Color
-                  </button>
-                </div>
-              </div>
               {formError && <div className="text-scars-red text-sm text-center">{formError}</div>}
               <button
                 type="submit"
@@ -631,42 +542,6 @@ export default function AdminProducts() {
                     ))}
                   </div>
                 )}
-              </div>
-              <div>
-                <label className="block mb-1 font-medium">Colors</label>
-                <div className="space-y-2">
-                  {editForm.colors.map((color, index) => (
-                    <div key={index} className="flex gap-2 items-center">
-                      <input
-                        type="text"
-                        placeholder="Color name"
-                        value={color.name}
-                        onChange={(e) => updateEditColor(index, 'name', e.target.value)}
-                        className="flex-1 border rounded px-3 py-2"
-                      />
-                      <input
-                        type="color"
-                        value={color.code}
-                        onChange={(e) => updateEditColor(index, 'code', e.target.value)}
-                        className="w-12 h-10 border rounded"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeEditColor(index)}
-                        className="px-2 py-2 bg-scars-red text-white rounded hover:bg-red-700"
-                      >
-                        X
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={addEditColor}
-                    className="w-full py-2 border-2 border-dashed border-gray-300 rounded hover:border-gray-400 transition"
-                  >
-                    + Add Color
-                  </button>
-                </div>
               </div>
               {editError && <div className="text-scars-red text-sm">{editError}</div>}
               <button

@@ -25,33 +25,41 @@ const CartContents = () => {
                   />
                   <div>
                      <h3 className="font-medium">{item.product.name}</h3>
-                     <p className="text-sm text-gray-500">
-                        Size: {item.size} | Color: {item.color}
-                     </p>
-                     <div className="flex items-center mt-2">
-                        <button 
-                           onClick={() => updateQuantity(item.product._id, item.size, item.color, item.quantity - 1)}
-                           className="rounded px-2 py-1 text-xl font-medium hover:bg-gray-100"
+                     <div className="text-sm text-gray-600">
+                        Size: {item.size}
+                     </div>
+                     <div className="flex items-center gap-2">
+                        <button
+                           onClick={() => updateQuantity(item.product._id, item.size, item.quantity - 1)}
+                           className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                           disabled={item.quantity <= 1}
                         >
                            -
                         </button>
-                        <span className="mx-4">{item.quantity}</span>
-                        <button 
-                           onClick={() => updateQuantity(item.product._id, item.size, item.color, item.quantity + 1)}
-                           className="rounded px-2 py-1 text-xl font-medium hover:bg-gray-100"
+                        <span className="px-2">{item.quantity}</span>
+                        <button
+                           onClick={() => updateQuantity(item.product._id, item.size, item.quantity + 1)}
+                           className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                           disabled={item.quantity >= item.product.stock}
                         >
                            +
                         </button>
                      </div>
+                     <button
+                        onClick={() => removeItem(item.product._id, item.size)}
+                        className="text-red-600 hover:text-red-800"
+                     >
+                        Remove
+                     </button>
                   </div>
                </div>
                <div className="text-right">
                   <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                   <button 
-                     onClick={() => removeItem(item.product._id, item.size, item.color)}
+                     onClick={() => removeItem(item.product._id, item.size)}
                      className="mt-2 hover:text-scars-red"
                   >
-                                           <RiDeleteBin3Line className="h-6 w-6 text-scars-red" />
+                     <RiDeleteBin3Line className="h-6 w-6 text-scars-red" />
                   </button>
                </div>
             </div>

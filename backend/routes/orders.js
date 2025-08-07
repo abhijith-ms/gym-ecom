@@ -67,7 +67,6 @@ router.post('/', protect, [
         name: product.name,
         quantity: item.quantity,
         size: item.size,
-        color: item.color,
         price: product.price,
         image: product.images[0]?.url || ''
       });

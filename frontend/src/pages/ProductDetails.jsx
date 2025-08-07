@@ -13,13 +13,13 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
 
   // Calculate total stock and check if selected size is in stock
   const totalStock = product ? Object.values(product.stock || {}).reduce((sum, qty) => sum + (qty || 0), 0) : 0;
   const selectedSizeStock = product && selectedSize ? (product.stock?.[selectedSize] || 0) : 0;
   const isSelectedSizeInStock = selectedSizeStock > 0;
+  const isLowStock = selectedSizeStock > 0 && selectedSizeStock < 5;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -27,7 +27,6 @@ const ProductDetails = () => {
         const res = await productsAPI.getById(id);
         setProduct(res.data.product);
         setSelectedSize(res.data.product.sizes?.[0] || '');
-        setSelectedColor(res.data.product.colors?.[0]?.name || '');
       } catch (error) {
         console.error('Error fetching product:', error);
         setProduct(null);
@@ -51,11 +50,11 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      toast.error('Please select size and color');
+    if (!selectedSize) {
+      toast.error('Please select size');
       return;
     }
-    addItem(product, quantity, selectedSize, selectedColor);
+    addItem(product, quantity, selectedSize);
     toast.success('Added to cart!');
     // Stay on same page instead of navigating to cart
   };
@@ -96,9 +95,9 @@ const ProductDetails = () => {
             <p className="text-md text-gray-400 line-through mb-2">${product.originalPrice}</p>
           )}
           <p className="mb-4">{product.description}</p>
-          {totalStock > 0 && totalStock < 5 && (
+          {isLowStock && (
             <p className="text-red-600 text-sm font-medium mb-2">
-              ⚠️ Only {totalStock} left in stock!
+              ⚠️ Only {selectedSizeStock} left in stock!
             </p>
           )}
           <div className="flex gap-4 mb-4">
@@ -110,19 +109,7 @@ const ProductDetails = () => {
                 className="border rounded px-2 py-1"
               >
                 {product.sizes?.filter(size => product.stock?.[size] > 0).map(size => (
-                  <option key={size} value={size}>{size} ({product.stock[size]} available)</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm mb-1">Color</label>
-              <select
-                value={selectedColor}
-                onChange={e => setSelectedColor(e.target.value)}
-                className="border rounded px-2 py-1"
-              >
-                {product.colors?.map(color => (
-                  <option key={color.name} value={color.name}>{color.name}</option>
+                  <option key={size} value={size}>{size}</option>
                 ))}
               </select>
             </div>

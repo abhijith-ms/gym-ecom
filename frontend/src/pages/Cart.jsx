@@ -27,29 +27,35 @@ const Cart = () => {
             />
             <div className="flex-1">
               <h3 className="font-semibold text-lg">{item.product.name}</h3>
-              <p className="text-sm text-gray-500 mb-2">
-                Size: {item.size} | Color: {item.color}
-              </p>
+              <div className="text-sm text-gray-600">
+                Size: {item.size}
+              </div>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => updateQuantity(item.product._id, item.size, item.color, item.quantity - 1)}
-                  className="px-2 py-1 border rounded"
+                  onClick={() => updateQuantity(item.product._id, item.size, item.quantity - 1)}
+                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                   disabled={item.quantity <= 1}
-                >-</button>
-                <span>{item.quantity}</span>
+                >
+                  -
+                </button>
+                <span className="px-2">{item.quantity}</span>
                 <button
-                  onClick={() => updateQuantity(item.product._id, item.size, item.color, item.quantity + 1)}
-                  className="px-2 py-1 border rounded"
+                  onClick={() => updateQuantity(item.product._id, item.size, item.quantity + 1)}
+                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                   disabled={item.quantity >= item.product.stock}
-                >+</button>
+                >
+                  +
+                </button>
               </div>
+              <button
+                onClick={() => removeItem(item.product._id, item.size)}
+                className="text-red-600 hover:text-red-800"
+              >
+                Remove
+              </button>
             </div>
             <div className="text-right">
               <p className="font-semibold text-lg mb-2">${(item.price * item.quantity).toFixed(2)}</p>
-              <button
-                onClick={() => removeItem(item.product._id, item.size, item.color)}
-                className="text-scars-red hover:underline text-sm"
-              >Remove</button>
             </div>
           </div>
         ))}
