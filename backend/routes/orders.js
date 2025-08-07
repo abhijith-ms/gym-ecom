@@ -14,9 +14,11 @@ router.post('/', protect, [
   body('shippingAddress').isObject().withMessage('Shipping address is required'),
   body('paymentMethod').isIn(['razorpay', 'cod']).withMessage('Valid payment method is required')
 ], async (req, res) => {
+  console.log('Order creation request body:', req.body); // <-- Added log
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors:', errors.array()); // <-- Added log
       return res.status(400).json({
         success: false,
         errors: errors.array()
@@ -26,6 +28,7 @@ router.post('/', protect, [
     const { orderItems, shippingAddress, paymentMethod, notes } = req.body;
 
     if (!orderItems || orderItems.length === 0) {
+      console.log('No order items provided'); // <-- Added log
       return res.status(400).json({
         success: false,
         message: 'No order items'
