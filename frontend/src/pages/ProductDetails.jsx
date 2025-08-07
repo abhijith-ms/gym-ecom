@@ -38,7 +38,7 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  const isWishlisted = wishlist.some(w => w._id === product?._id);
+  const isWishlisted = wishlist?.some(w => w._id === product?._id) || false;
 
   const handleWishlist = () => {
     if (isWishlisted) {
