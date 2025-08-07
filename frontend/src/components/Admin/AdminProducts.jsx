@@ -8,7 +8,13 @@ const initialForm = {
   category: "topwear",
   brand: "",
   material: "",
-  stock: "",
+  stock_XS: "",
+  stock_S: "",
+  stock_M: "",
+  stock_L: "",
+  stock_XL: "",
+  stock_XXL: "",
+  stock_XXXL: "",
   images: [],
   sizes: [],
   colors: []
@@ -110,7 +116,13 @@ export default function AdminProducts() {
       const payload = {
         ...form,
         price: parseFloat(form.price),
-        stock: parseInt(form.stock, 10),
+        stock_XS: parseInt(form.stock_XS, 10) || 0,
+        stock_S: parseInt(form.stock_S, 10) || 0,
+        stock_M: parseInt(form.stock_M, 10) || 0,
+        stock_L: parseInt(form.stock_L, 10) || 0,
+        stock_XL: parseInt(form.stock_XL, 10) || 0,
+        stock_XXL: parseInt(form.stock_XXL, 10) || 0,
+        stock_XXXL: parseInt(form.stock_XXXL, 10) || 0,
         images: form.images,
         sizes: form.sizes,
         colors: form.colors
@@ -140,7 +152,13 @@ export default function AdminProducts() {
       category: product.category,
       brand: product.brand,
       material: product.material,
-      stock: product.stock,
+      stock_XS: product.stock?.XS || 0,
+      stock_S: product.stock?.S || 0,
+      stock_M: product.stock?.M || 0,
+      stock_L: product.stock?.L || 0,
+      stock_XL: product.stock?.XL || 0,
+      stock_XXL: product.stock?.XXL || 0,
+      stock_XXXL: product.stock?.XXXL || 0,
       images: product.images || [],
       sizes: product.sizes || [],
       colors: product.colors || []
@@ -207,7 +225,13 @@ export default function AdminProducts() {
       const payload = {
         ...editForm,
         price: parseFloat(editForm.price),
-        stock: parseInt(editForm.stock, 10),
+        stock_XS: parseInt(editForm.stock_XS, 10) || 0,
+        stock_S: parseInt(editForm.stock_S, 10) || 0,
+        stock_M: parseInt(editForm.stock_M, 10) || 0,
+        stock_L: parseInt(editForm.stock_L, 10) || 0,
+        stock_XL: parseInt(editForm.stock_XL, 10) || 0,
+        stock_XXL: parseInt(editForm.stock_XXL, 10) || 0,
+        stock_XXXL: parseInt(editForm.stock_XXXL, 10) || 0,
         images: editForm.images,
         sizes: editForm.sizes,
         colors: editForm.colors
@@ -344,7 +368,16 @@ export default function AdminProducts() {
                     <td className="p-3 font-medium">{product.name}</td>
                     <td className="p-3">₹{product.price}</td>
                     <td className="p-3 capitalize">{product.category}</td>
-                    <td className="p-3">{product.stock}</td>
+                    <td className="p-3">
+                      <div className="text-sm">
+                        <div className="font-medium">Total: {Object.values(product.stock || {}).reduce((sum, qty) => sum + (qty || 0), 0)}</div>
+                        <div className="text-xs text-gray-600">
+                          {product.sizes?.filter(size => product.stock?.[size] > 0).map(size => 
+                            `${size}: ${product.stock?.[size] || 0}`
+                          ).join(', ') || 'No stock'}
+                        </div>
+                      </div>
+                    </td>
                     <td className="p-3">
                       <div className="flex flex-col sm:flex-row gap-2">
                         <button className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition text-sm" onClick={() => openEditModal(product)}>Edit</button>
@@ -387,9 +420,24 @@ export default function AdminProducts() {
                   <label className="block mb-1 font-medium">Price (₹)</label>
                   <input name="price" type="number" min="0" value={form.price} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none" />
                 </div>
-                <div className="flex-1">
-                  <label className="block mb-1 font-medium">Stock</label>
-                  <input name="stock" type="number" min="0" value={form.stock} onChange={handleFormChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none" />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Stock by Size</label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                  {sizeOptions.map(size => (
+                    <div key={size} className="flex flex-col">
+                      <label className="text-xs font-medium text-gray-600 mb-1">{size}</label>
+                      <input
+                        name={`stock_${size}`}
+                        type="number"
+                        min="0"
+                        value={form[`stock_${size}`] || ''}
+                        onChange={handleFormChange}
+                        className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
+                        placeholder="0"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-2">
@@ -545,9 +593,24 @@ export default function AdminProducts() {
                   <label className="block mb-1 font-medium">Price (₹)</label>
                   <input name="price" type="number" min="0" value={editForm.price} onChange={handleEditFormChange} required className="w-full border rounded px-3 py-2" />
                 </div>
-                <div className="flex-1">
-                  <label className="block mb-1 font-medium">Stock</label>
-                  <input name="stock" type="number" min="0" value={editForm.stock} onChange={handleEditFormChange} required className="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Stock by Size</label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                  {sizeOptions.map(size => (
+                    <div key={size} className="flex flex-col">
+                      <label className="text-xs font-medium text-gray-600 mb-1">{size}</label>
+                      <input
+                        name={`stock_${size}`}
+                        type="number"
+                        min="0"
+                        value={editForm[`stock_${size}`] || ''}
+                        onChange={handleEditFormChange}
+                        className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
+                        placeholder="0"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
               <div className="flex gap-2">
