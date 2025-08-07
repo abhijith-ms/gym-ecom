@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast';
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addItem } = useCartStore(state => state.addItem);
+  const addItem = useCartStore(state => state.addItem);
   const { wishlist, addItem: addWishlist, removeItem: removeWishlist } = useWishlistStore();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,6 +20,11 @@ const ProductDetails = () => {
   const selectedSizeStock = product && selectedSize ? (product.stock?.[selectedSize] || 0) : 0;
   const isSelectedSizeInStock = selectedSizeStock > 0;
   const isLowStock = selectedSizeStock > 0 && selectedSizeStock < 5;
+
+  // Reset quantity when size changes
+  useEffect(() => {
+    setQuantity(1);
+  }, [selectedSize]);
 
   useEffect(() => {
     const fetchProduct = async () => {
