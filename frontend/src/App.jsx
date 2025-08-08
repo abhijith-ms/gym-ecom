@@ -22,6 +22,7 @@ import AdminProducts from "./components/Admin/AdminProducts";
 import AdminOrders from "./components/Admin/AdminOrders";
 import AdminUsers from "./components/Admin/AdminUsers";
 import AdminOffers from "./components/Admin/AdminOffers";
+import ScrollToTop from "./components/Common/ScrollToTop";
 
 const App = () => {
   const initializeAuth = useAuthStore(state => state.initializeAuth);
@@ -32,6 +33,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Toaster position="top-right" />
       <Routes>
         {/* Auth Routes */}
