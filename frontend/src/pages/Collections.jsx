@@ -9,9 +9,11 @@ function useQuery() {
 const Collections = () => {
   const query = useQuery();
   const category = query.get('category') || '';
+  const search = query.get('search') || '';
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(category);
+  const [searchTerm, setSearchTerm] = useState(search);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +22,7 @@ const Collections = () => {
       try {
         const params = {};
         if (selectedCategory) params.category = selectedCategory;
+        if (searchTerm) params.search = searchTerm;
         const res = await productsAPI.getAll(params);
         setProducts(res.data.products);
       } catch (err) {
@@ -29,11 +32,23 @@ const Collections = () => {
       }
     };
     fetchProducts();
-  }, [selectedCategory]);
+  }, [selectedCategory, searchTerm]);
 
   const handleCategoryChange = e => {
-    setSelectedCategory(e.target.value);
-    navigate(`/collections?category=${e.target.value}`);
+    const newCategory = e.target.value;
+    setSelectedCategory(newCategory);
+    const searchParams = new URLSearchParams();
+    if (newCategory) searchParams.set('category', newCategory);
+    if (searchTerm) searchParams.set('search', searchTerm);
+    navigate(`/collections?${searchParams.toString()}`);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const searchParams = new URLSearchParams();
+    if (selectedCategory) searchParams.set('category', selectedCategory);
+    if (searchTerm) searchParams.set('search', searchTerm);
+    navigate(`/collections?${searchParams.toString()}`);
   };
 
   const categories = ['', 'topwear', 'bottomwear'];
@@ -42,7 +57,16 @@ const Collections = () => {
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-6">Collections</h2>
       <div className="flex flex-col md:flex-row gap-4 mb-8">
-        <select value={selectedCategory} onChange={handleCategoryChange} className="border rounded px-4 py-2">
+        <form onSubmit={handleSearch} className="flex-1">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full border rounded px-4 py-2"
+          />
+        </form>
+        <select value={selectedCategory} onChange={handleCategoryChange} className="border rounded px-4 py-2 md:w-48">
           <option value="">All Categories</option>
           {categories.filter(c => c).map(c => (
             <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
@@ -52,7 +76,9 @@ const Collections = () => {
       {loading ? (
         <div className="text-center py-12 text-gray-500">Loading products...</div>
       ) : products.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">No products found.</div>
+        <div className="text-center py-12 text-gray-500">
+          {searchTerm ? `No products found for "${searchTerm}"` : 'No products found.'}
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map(product => (

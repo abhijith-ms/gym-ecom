@@ -43,7 +43,7 @@ const Footer = () => (
               <div className="p-2 bg-scars-red rounded-lg">
                 <FiMail className="w-5 h-5" />
               </div>
-              <a href="mailto:Scarsindia2025@gmail.com" className="text-lg hover:text-scars-red transition-colors duration-300">Scarsindia2025@gmail.com</a>
+              <a href="mailto:scarsindia2025@gmail.com" className="text-lg hover:text-scars-red transition-colors duration-300">scarsindia2025@gmail.com</a>
             </div>
           </div>
           

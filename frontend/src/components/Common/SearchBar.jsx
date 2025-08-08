@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { HiMagnifyingGlass, HiMiniXMark } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
    const [searchTerm, setSearchTerm] = useState("");
    const [isOpen, setIsOpen] = useState(false);
    const searchRef = useRef(null);
    const inputRef = useRef(null);
+   const navigate = useNavigate();
    
    const handleSearchToggle = () => {
       setIsOpen(!isOpen);
@@ -13,8 +15,12 @@ const SearchBar = () => {
    
    const handleSearch = (e) => {
       e.preventDefault();
-      console.log("Search Term", searchTerm);
-      setIsOpen(false);
+      if (searchTerm.trim()) {
+         // Navigate to products page with search parameter
+         navigate(`/collections?search=${encodeURIComponent(searchTerm.trim())}`);
+         setIsOpen(false);
+         setSearchTerm(""); // Clear search term after search
+      }
    }
 
    // Close search when clicking outside
