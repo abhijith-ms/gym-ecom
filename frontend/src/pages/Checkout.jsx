@@ -271,14 +271,10 @@ const Checkout = () => {
             <span>Subtotal:</span>
             <span>₹{getTotalPrice().toFixed(2)}</span>
           </div>
-          <div className="flex justify-between">
-            <span>GST (5%):</span>
-            <span>₹{(getTotalPrice() * 0.05).toFixed(2)}</span>
-          </div>
           <div className="border-t pt-2">
             <div className="flex justify-between font-bold text-lg">
               <span>Total:</span>
-              <span>₹{(getTotalPrice() + (getTotalPrice() * 0.05)).toFixed(2)}</span>
+              <span>₹{getTotalPrice().toFixed(2)}</span>
             </div>
           </div>
           {paymentMethod === 'razorpay' && (

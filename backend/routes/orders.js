@@ -73,7 +73,7 @@ router.post('/', protect, [
     }
 
     // Calculate tax and shipping
-    const taxPrice = itemsPrice * 0.05; // 5% GST (reduced from 18%)
+    const taxPrice = 0; // 0% tax
     const shippingPrice = 0; // No delivery fee
     const totalPrice = itemsPrice + taxPrice + shippingPrice;
 
