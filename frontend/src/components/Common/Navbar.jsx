@@ -143,10 +143,8 @@ const Navbar = () => {
             <HiOutlineShoppingBag className="h-5 w-5 text-scars-black group-hover:text-scars-red" />
           </button>
           
-          {/* Search-icon */}
-          <div className="overflow-hidden">
-            <SearchBar />
-          </div>
+          {/* Search Bar */}
+          <SearchBar />
           
           <button 
             onClick={toggleNavDrawer} 
