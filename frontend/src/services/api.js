@@ -96,4 +96,14 @@ export const usersAPI = {
   update: (id, userData) => api.put(`/users/${id}`, userData),
   delete: (id) => api.delete(`/users/${id}`),
   getStats: () => api.get('/users/stats/overview'),
+};
+
+// Offers API
+export const offersAPI = {
+  getCurrent: () => api.get('/offers/current'),
+  getAll: () => api.get('/offers'),
+  getById: (id) => api.get(`/offers/${id}`),
+  create: (offerData) => api.post('/offers', offerData),
+  update: (id, offerData) => api.put(`/offers/${id}`, offerData),
+  delete: (id) => api.delete(`/offers/${id}`)
 }; 

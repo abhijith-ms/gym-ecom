@@ -1,39 +1,64 @@
 import { useState, useEffect } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import { currentOffer, isOfferValid, formatDate } from '../../config/offers';
+import { offersAPI } from '../../services/api';
 
 const OfferPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentOffer, setCurrentOffer] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Only show popup if offer is valid
-    if (!isOfferValid()) return;
+    const fetchCurrentOffer = async () => {
+      try {
+        const response = await offersAPI.getCurrent();
+        if (response.data.success && response.data.offer) {
+          setCurrentOffer(response.data.offer);
+          
+          // Check if popup has been dismissed in this session
+          const hasSeenPopup = response.data.offer.showOncePerSession 
+            ? sessionStorage.getItem('offerPopupDismissed')
+            : false;
+            
+          if (!hasSeenPopup) {
+            // Show popup after a short delay
+            const timer = setTimeout(() => {
+              setIsOpen(true);
+            }, response.data.offer.delay || 2000);
 
-    // Check if popup has been dismissed in this session
-    const hasSeenPopup = currentOffer.showOncePerSession 
-      ? sessionStorage.getItem('offerPopupDismissed')
-      : false;
-      
-    if (!hasSeenPopup) {
-      // Show popup after a short delay
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, currentOffer.delay);
+            return () => clearTimeout(timer);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching current offer:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      return () => clearTimeout(timer);
-    }
+    fetchCurrentOffer();
   }, []);
 
   const handleClose = () => {
     setIsOpen(false);
     // Mark as dismissed for this session
-    if (currentOffer.showOncePerSession) {
+    if (currentOffer?.showOncePerSession) {
       sessionStorage.setItem('offerPopupDismissed', 'true');
     }
   };
 
-  if (!isOpen) return null;
+  // Helper function to format date for display
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  // Don't render anything if loading or no offer
+  if (loading || !currentOffer || !isOpen) return null;
 
   return (
     <>

@@ -21,6 +21,7 @@ import orderRoutes from './routes/orders.js';
 import paymentRoutes from './routes/payments.js';
 import userRoutes from './routes/users.js';
 import smsRoutes from './routes/sms.js';
+import offerRoutes from './routes/offers.js';
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sms', smsRoutes);
+app.use('/api/offers', offerRoutes);
 
 // Root route
 app.get('/', (req, res) => {
