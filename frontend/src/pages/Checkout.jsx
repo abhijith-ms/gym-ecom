@@ -53,8 +53,9 @@ const Checkout = () => {
     
     // Check stock before submitting
     for (const item of items) {
-      if (item.quantity > item.product.stock) {
-        toast.error(`Insufficient stock for ${item.product.name}. Available: ${item.product.stock}`);
+      const availableStock = item.product.stock[item.size] || 0;
+      if (item.quantity > availableStock) {
+        toast.error(`Insufficient stock for ${item.product.name} in size ${item.size}. Available: ${availableStock}`);
         return null;
       }
     }
@@ -115,7 +116,7 @@ const Checkout = () => {
         const processedOrder = {
           ...order,
           _id: order._id || order.id,
-          totalAmount: order.totalPrice || order.itemsPrice
+          totalAmount: order.totalPrice // Always use totalPrice which includes tax and shipping
         };
         console.log('Setting currentOrder with processed data:', processedOrder);
         setCurrentOrder(processedOrder);
