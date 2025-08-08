@@ -1,6 +1,4 @@
 import { IoLogoInstagram } from "react-icons/io"
-import { RiTwitterXLine } from "react-icons/ri"
-import { TbBrandMeta } from "react-icons/tb"
 import { FiPhoneCall, FiMail } from "react-icons/fi"
 import { Link } from "react-router-dom"
 import scarsLogo from "../../assets/scars.png"
@@ -39,13 +37,13 @@ const Footer = () => (
               <div className="p-2 bg-scars-red rounded-lg">
                 <FiPhoneCall className="w-5 h-5" />
               </div>
-              <a href="tel:+911234567890" className="text-lg hover:text-scars-red transition-colors duration-300">+91 12345 67890</a>
+              <a href="tel:+919072808492" className="text-lg hover:text-scars-red transition-colors duration-300">+91 90728 08492</a>
             </div>
             <div className="flex items-center justify-center md:justify-start gap-3">
               <div className="p-2 bg-scars-red rounded-lg">
                 <FiMail className="w-5 h-5" />
               </div>
-              <a href="mailto:info@gymbrand.com" className="text-lg hover:text-scars-red transition-colors duration-300">info@gymbrand.com</a>
+              <a href="mailto:Scarsindia2025@gmail.com" className="text-lg hover:text-scars-red transition-colors duration-300">Scarsindia2025@gmail.com</a>
             </div>
           </div>
           
@@ -53,17 +51,9 @@ const Footer = () => (
           <div className="mt-8">
             <h5 className="text-lg font-semibold mb-4 text-white">Follow Us</h5>
             <div className="flex justify-center md:justify-start gap-4">
-              <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" 
+              <a href="https://www.instagram.com/scars_india?igsh=MTV2aTFiczJqZGJwcg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" 
                  className="p-3 bg-gray-800 rounded-xl hover:bg-scars-red transition-all duration-300 hover:scale-110 group">
                 <IoLogoInstagram className="w-6 h-6 group-hover:scale-110 transition-transform" />
-              </a>
-              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter" 
-                 className="p-3 bg-gray-800 rounded-xl hover:bg-scars-red transition-all duration-300 hover:scale-110 group">
-                <RiTwitterXLine className="w-6 h-6 group-hover:scale-110 transition-transform" />
-              </a>
-              <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Meta" 
-                 className="p-3 bg-gray-800 rounded-xl hover:bg-scars-red transition-all duration-300 hover:scale-110 group">
-                <TbBrandMeta className="w-6 h-6 group-hover:scale-110 transition-transform" />
               </a>
             </div>
           </div>
