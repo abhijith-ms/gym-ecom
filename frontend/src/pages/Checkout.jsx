@@ -163,6 +163,16 @@ const Checkout = () => {
         {/* Payment Method Selection */}
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-4">Payment Method</h3>
+          
+          {/* Free Shipping Notice */}
+          {getTotalPrice() < 1000 && (
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                💡 <strong>Free shipping on orders above ₹1000!</strong> Add ₹{(1000 - getTotalPrice()).toFixed(2)} more to your cart to get free shipping.
+              </p>
+            </div>
+          )}
+          
           <div className="space-y-3">
             <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
               <input
@@ -262,10 +272,26 @@ const Checkout = () => {
             </li>
           ))}
         </ul>
-        <div className="border-t pt-4">
-          <div className="flex justify-between font-bold text-lg">
-            <span>Total:</span>
+        
+        {/* Price Breakdown */}
+        <div className="border-t pt-4 space-y-2">
+          <div className="flex justify-between">
+            <span>Subtotal:</span>
             <span>₹{getTotalPrice().toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Tax (18%):</span>
+            <span>₹{(getTotalPrice() * 0.18).toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Shipping:</span>
+            <span>{getTotalPrice() > 1000 ? 'Free' : '₹100.00'}</span>
+          </div>
+          <div className="border-t pt-2">
+            <div className="flex justify-between font-bold text-lg">
+              <span>Total:</span>
+              <span>₹{(getTotalPrice() + (getTotalPrice() * 0.18) + (getTotalPrice() > 1000 ? 0 : 100)).toFixed(2)}</span>
+            </div>
           </div>
           {paymentMethod === 'razorpay' && (
             <div className="text-sm text-gray-500 mt-2">
