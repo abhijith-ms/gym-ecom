@@ -28,9 +28,15 @@ const AdminOffers = () => {
 
   const fetchCurrentOffer = async () => {
     try {
+      console.log('Fetching current offer...'); // Debug log
       const response = await offersAPI.getCurrent();
+      console.log('API response:', response.data); // Debug log
+      
       if (response.data.success && response.data.offer) {
         const offer = response.data.offer;
+        console.log('Received offer:', offer); // Debug log
+        console.log('Offer ID:', offer._id); // Debug log
+        
         setCurrentOffer(offer);
         setForm({
           title: offer.title || '',
@@ -47,6 +53,8 @@ const AdminOffers = () => {
           showOncePerSession: offer.showOncePerSession !== undefined ? offer.showOncePerSession : true,
           isActive: offer.isActive !== undefined ? offer.isActive : true
         });
+      } else {
+        console.log('No offer found in response'); // Debug log
       }
     } catch (error) {
       console.error('Error fetching current offer:', error);
@@ -146,12 +154,28 @@ const AdminOffers = () => {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-scars-black">Manage Offers</h1>
-          <button
-            onClick={() => setIsEditing(!isEditing)}
-            className="px-4 py-2 bg-scars-red text-white rounded hover:bg-red-700 transition"
-          >
-            {isEditing ? 'Cancel Edit' : currentOffer ? 'Edit Offer' : 'Create Offer'}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={async () => {
+                try {
+                  console.log('Testing API call...');
+                  const response = await offersAPI.getCurrent();
+                  console.log('Test API response:', response.data);
+                } catch (error) {
+                  console.error('Test API error:', error);
+                }
+              }}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            >
+              Test API
+            </button>
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="px-4 py-2 bg-scars-red text-white rounded hover:bg-red-700 transition"
+            >
+              {isEditing ? 'Cancel Edit' : currentOffer ? 'Edit Offer' : 'Create Offer'}
+            </button>
+          </div>
         </div>
 
         {/* Current Offer Status */}
