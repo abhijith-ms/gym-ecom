@@ -141,25 +141,11 @@ const NewArrivals = () => {
                     </span>
                   </div>
                   
-                  {/* Price and Rating */}
+                  {/* Price */}
                   <div className="flex items-center justify-between">
                     <span className="text-3xl sm:text-4xl font-black text-scars-red">
                       ₹{product.price?.toLocaleString()}
                     </span>
-                    
-                    {/* Rating Stars */}
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} className={`text-lg ${
-                          i < (product.rating || 4) ? 'text-yellow-400' : 'text-gray-300'
-                        }`}>
-                          ★
-                        </span>
-                      ))}
-                      <span className="text-sm text-gray-500 ml-2">
-                        ({product.numReviews || 0})
-                      </span>
-                    </div>
                   </div>
                 </div>
               </div>
