@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useCartStore } from '../store/useStore';
 import { useAuthStore } from '../store/useStore';
-import { ordersAPI } from '../services/api';
+import { ordersAPI, authAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import RazorpayPayment from '../components/Payment/RazorpayPayment';
 
 const Checkout = () => {
   const { items, getTotalPrice, clearCart } = useCartStore();
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
   const [address, setAddress] = useState({
     name: '',
     phone: '',
@@ -20,19 +20,39 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
   const [currentOrder, setCurrentOrder] = useState(null);
+  const [isNewAddress, setIsNewAddress] = useState(false);
   const navigate = useNavigate();
 
   // Prefill address from user profile on mount
   React.useEffect(() => {
-    if (user && user.address && !address.street && !address.city && !address.state && !address.zipCode) {
-      setAddress({
+    if (user) {
+      const savedAddress = {
         name: user.name || '',
         phone: user.phone || '',
-        street: user.address.street || '',
-        city: user.address.city || '',
-        state: user.address.state || '',
-        zipCode: user.address.zipCode || '',
-      });
+        street: user.address?.street || '',
+        city: user.address?.city || '',
+        state: user.address?.state || '',
+        zipCode: user.address?.zipCode || '',
+      };
+      
+      // Check if user has a saved address
+      const hasSavedAddress = savedAddress.street && savedAddress.city && savedAddress.state;
+      
+      if (hasSavedAddress) {
+        setAddress(savedAddress);
+        setIsNewAddress(false);
+      } else {
+        // If no saved address, prefill with user's basic info
+        setAddress({
+          name: user.name || '',
+          phone: user.phone || '',
+          street: '',
+          city: '',
+          state: '',
+          zipCode: '',
+        });
+        setIsNewAddress(true);
+      }
     }
   }, [user]);
 
@@ -61,6 +81,30 @@ const Checkout = () => {
     }
     
     try {
+      // Auto-save address to user profile if it's a new address
+      if (isNewAddress && address.street && address.city && address.state) {
+        try {
+          const addressData = {
+            name: address.name,
+            phone: address.phone,
+            address: {
+              street: address.street,
+              city: address.city,
+              state: address.state,
+              zipCode: address.zipCode
+            }
+          };
+          
+          await authAPI.updateProfile(addressData);
+          updateUser({ ...user, ...addressData });
+          toast.success('Address saved to your profile!');
+          setIsNewAddress(false);
+        } catch (error) {
+          console.error('Failed to save address:', error);
+          // Continue with order creation even if address save fails
+        }
+      }
+      
       const orderItems = items.map(item => ({
         product: item.product._id,
         name: item.product.name,
@@ -152,6 +196,42 @@ const Checkout = () => {
       <h2 className="text-2xl font-bold mb-6">Checkout</h2>
       <div className="bg-white rounded-lg shadow p-6 mb-8">
         <h3 className="text-lg font-semibold mb-4">Shipping Address</h3>
+        
+        {/* Address Save Indicator */}
+        {isNewAddress && (
+          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-sm text-green-800">
+              💾 <strong>New address will be saved to your profile</strong> for future orders.
+            </p>
+          </div>
+        )}
+        
+        {/* Use Saved Address Button */}
+        {!isNewAddress && user?.address?.street && (
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800 mb-2">
+              📍 <strong>Using your saved address</strong>
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setAddress({
+                  name: user.name || '',
+                  phone: user.phone || '',
+                  street: '',
+                  city: '',
+                  state: '',
+                  zipCode: '',
+                });
+                setIsNewAddress(true);
+              }}
+              className="text-sm text-blue-600 hover:text-blue-800 underline"
+            >
+              Use a different address
+            </button>
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <input name="name" value={address.name} onChange={handleChange} required placeholder="Full Name" className="border rounded px-3 py-2" />
           <input name="phone" value={address.phone} onChange={handleChange} required placeholder="Phone Number" className="border rounded px-3 py-2" />
