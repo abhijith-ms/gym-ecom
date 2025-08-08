@@ -4,56 +4,55 @@ import { Link } from "react-router-dom"
 import scarsLogo from "../../assets/scars.png"
 
 const Footer = () => (
-  <footer className="bg-gradient-to-r from-scars-black via-gray-900 to-scars-black text-white py-16 sm:py-20 md:py-24 mt-16 sm:mt-20 md:mt-24">
-    <div className="container mx-auto max-w-7xl px-6 lg:px-0">
+  <footer className="bg-gradient-to-r from-scars-black via-gray-900 to-scars-black text-white py-8 sm:py-12 mt-8 sm:mt-12">
+    <div className="container mx-auto max-w-7xl px-4 lg:px-0">
       {/* Main Footer Content */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-12 md:mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
         
         {/* Brand Section */}
         <div className="text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-4 mb-6">
-            <div className="bg-white rounded-xl p-3 flex items-center justify-center shadow-xl">
+          <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+            <div className="bg-white rounded-lg p-2 flex items-center justify-center shadow-lg">
               <img 
                 src={scarsLogo} 
                 alt="SCARS Clothing Brand" 
-                className="h-10 sm:h-12 object-contain"
+                className="h-8 sm:h-10 object-contain"
               />
             </div>
             <div>
-              <h3 className="text-2xl sm:text-3xl font-black text-white">SCARS</h3>
-              <p className="text-sm text-gray-400 uppercase tracking-wide">Clothing Brand</p>
+              <h3 className="text-xl sm:text-2xl font-black text-white">SCARS</h3>
+              <p className="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Clothing Brand</p>
             </div>
           </div>
-          <p className="text-lg text-gray-300 leading-relaxed max-w-md mx-auto md:mx-0">
-            Premium activewear designed for champions. Elevate your performance with our cutting-edge gym wear.
+          <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-md mx-auto md:mx-0">
+            Premium activewear designed for champions.
           </p>
         </div>
         
         {/* Contact Section */}
         <div className="text-center md:text-left">
-          <h4 className="text-xl sm:text-2xl font-bold mb-6 text-white">Get In Touch</h4>
-          <div className="space-y-4">
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <div className="p-2 bg-scars-red rounded-lg">
-                <FiPhoneCall className="w-5 h-5" />
+          <h4 className="text-lg sm:text-xl font-bold mb-4 text-white">Contact</h4>
+          <div className="space-y-3">
+            <div className="flex items-center justify-center md:justify-start gap-2">
+              <div className="p-1.5 bg-scars-red rounded-md">
+                <FiPhoneCall className="w-4 h-4" />
               </div>
-              <a href="tel:+919072808492" className="text-lg hover:text-scars-red transition-colors duration-300">+91 90728 08492</a>
+              <a href="tel:+919072808492" className="text-sm sm:text-base hover:text-scars-red transition-colors duration-300">+91 90728 08492</a>
             </div>
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <div className="p-2 bg-scars-red rounded-lg">
-                <FiMail className="w-5 h-5" />
+            <div className="flex items-center justify-center md:justify-start gap-2">
+              <div className="p-1.5 bg-scars-red rounded-md">
+                <FiMail className="w-4 h-4" />
               </div>
-              <a href="mailto:scarsindia2025@gmail.com" className="text-lg hover:text-scars-red transition-colors duration-300">scarsindia2025@gmail.com</a>
+              <a href="mailto:scarsindia2025@gmail.com" className="text-sm sm:text-base hover:text-scars-red transition-colors duration-300">scarsindia2025@gmail.com</a>
             </div>
           </div>
           
           {/* Social Media */}
-          <div className="mt-8">
-            <h5 className="text-lg font-semibold mb-4 text-white">Follow Us</h5>
-            <div className="flex justify-center md:justify-start gap-4">
+          <div className="mt-6">
+            <div className="flex justify-center md:justify-start gap-3">
               <a href="https://www.instagram.com/scars_india?igsh=MTV2aTFiczJqZGJwcg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" 
-                 className="p-3 bg-gray-800 rounded-xl hover:bg-scars-red transition-all duration-300 hover:scale-110 group">
-                <IoLogoInstagram className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                 className="p-2 bg-gray-800 rounded-lg hover:bg-scars-red transition-all duration-300 hover:scale-110 group">
+                <IoLogoInstagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
               </a>
             </div>
           </div>
@@ -61,29 +60,27 @@ const Footer = () => (
         
         {/* Quick Links Section */}
         <div className="text-center md:text-left">
-          <h4 className="text-xl sm:text-2xl font-bold mb-6 text-white">Quick Links</h4>
-          <div className="space-y-3">
-            {/* Each link is a real router Link, accessible and clickable */}
-            <Link to="/" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>Home</Link>
-            <Link to="/collections?category=topwear" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>Topwear</Link>
-            <Link to="/collections?category=bottomwear" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>Bottomwear</Link>
-            <Link to="/collections" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>All Products</Link>
-            <Link to="/profile" className="block text-lg hover:text-scars-red transition-colors duration-300 hover:translate-x-2 transform" role="link" tabIndex={0}>My Account</Link>
+          <h4 className="text-lg sm:text-xl font-bold mb-4 text-white">Quick Links</h4>
+          <div className="space-y-2">
+            <Link to="/" className="block text-sm sm:text-base hover:text-scars-red transition-colors duration-300 hover:translate-x-1 transform" role="link" tabIndex={0}>Home</Link>
+            <Link to="/collections?category=topwear" className="block text-sm sm:text-base hover:text-scars-red transition-colors duration-300 hover:translate-x-1 transform" role="link" tabIndex={0}>Topwear</Link>
+            <Link to="/collections?category=bottomwear" className="block text-sm sm:text-base hover:text-scars-red transition-colors duration-300 hover:translate-x-1 transform" role="link" tabIndex={0}>Bottomwear</Link>
+            <Link to="/collections" className="block text-sm sm:text-base hover:text-scars-red transition-colors duration-300 hover:translate-x-1 transform" role="link" tabIndex={0}>All Products</Link>
           </div>
         </div>
       </div>
       
       {/* Bottom Bar */}
-      <div className="border-t border-gray-700 pt-8 md:pt-12">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <p className="text-lg text-gray-400">
-              &copy; {new Date().getFullYear()} <span className="text-scars-red font-semibold">SCARS Clothing Brand</span>. All rights reserved.
+      <div className="border-t border-gray-700 pt-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="text-center sm:text-left">
+            <p className="text-sm text-gray-400">
+              &copy; {new Date().getFullYear()} <span className="text-scars-red font-semibold">SCARS</span>. All rights reserved.
             </p>
           </div>
-          <div className="flex gap-6 text-base">
-            <Link to="/privacy" className="hover:text-scars-red transition-colors duration-300">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-scars-red transition-colors duration-300">Terms of Service</Link>
+          <div className="flex gap-4 text-sm">
+            <Link to="/privacy" className="hover:text-scars-red transition-colors duration-300">Privacy</Link>
+            <Link to="/terms" className="hover:text-scars-red transition-colors duration-300">Terms</Link>
             <Link to="/returns" className="hover:text-scars-red transition-colors duration-300">Returns</Link>
           </div>
         </div>
