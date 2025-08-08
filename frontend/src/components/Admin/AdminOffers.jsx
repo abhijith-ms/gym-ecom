@@ -76,12 +76,16 @@ const AdminOffers = () => {
     e.preventDefault();
     
     try {
-      if (currentOffer) {
+      console.log('Submitting offer:', { currentOffer, form }); // Debug log
+      
+      if (currentOffer && currentOffer._id) {
         // Update existing offer
+        console.log('Updating offer with ID:', currentOffer._id); // Debug log
         await offersAPI.update(currentOffer._id, form);
         toast.success('Offer updated successfully!');
       } else {
         // Create new offer
+        console.log('Creating new offer'); // Debug log
         await offersAPI.create(form);
         toast.success('Offer created successfully!');
       }
