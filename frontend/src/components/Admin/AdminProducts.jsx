@@ -16,7 +16,9 @@ const initialForm = {
   stock_XXL: "",
   stock_XXXL: "",
   images: [],
-  sizes: []
+  sizes: [],
+  isNewArrival: false,
+  isBestSeller: false
 };
 
 const categories = ["topwear", "bottomwear"];
@@ -134,7 +136,9 @@ export default function AdminProducts() {
       stock_XXL: product.stock?.XXL || 0,
       stock_XXXL: product.stock?.XXXL || 0,
       images: product.images || [],
-      sizes: product.sizes || []
+      sizes: product.sizes || [],
+      isNewArrival: product.isNewArrival || false,
+      isBestSeller: product.isBestSeller || false
     });
     setEditId(product._id);
     setEditModal(true);
@@ -293,13 +297,14 @@ export default function AdminProducts() {
                 <th className="p-3">Price</th>
                 <th className="p-3">Category</th>
                 <th className="p-3">Stock</th>
+                <th className="p-3">Status</th>
                 <th className="p-3">Actions</th>
               </tr>
             </thead>
             <tbody>
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-gray-500">No products found.</td>
+                  <td colSpan={7} className="text-center py-8 text-gray-500">No products found.</td>
                 </tr>
               ) : (
                 products.map(product => (
@@ -324,6 +329,23 @@ export default function AdminProducts() {
                             `${size}: ${product.stock?.[size] || 0}`
                           ).join(', ') || 'No stock'}
                         </div>
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex flex-col gap-1">
+                        {product.isNewArrival && (
+                          <span className="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                            New Arrival
+                          </span>
+                        )}
+                        {product.isBestSeller && (
+                          <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">
+                            Best Seller
+                          </span>
+                        )}
+                        {!product.isNewArrival && !product.isBestSeller && (
+                          <span className="text-xs text-gray-500">Regular</span>
+                        )}
                       </div>
                     </td>
                     <td className="p-3">
@@ -437,6 +459,37 @@ export default function AdminProducts() {
                   </div>
                 )}
               </div>
+              
+              {/* Product Flags */}
+              <div className="flex gap-4">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="isNewArrival"
+                    name="isNewArrival"
+                    checked={form.isNewArrival}
+                    onChange={(e) => setForm({ ...form, isNewArrival: e.target.checked })}
+                    className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="isNewArrival" className="text-sm font-medium text-gray-700">
+                    New Arrival
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="isBestSeller"
+                    name="isBestSeller"
+                    checked={form.isBestSeller}
+                    onChange={(e) => setForm({ ...form, isBestSeller: e.target.checked })}
+                    className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="isBestSeller" className="text-sm font-medium text-gray-700">
+                    Best Seller
+                  </label>
+                </div>
+              </div>
+              
               {formError && <div className="text-scars-red text-sm text-center">{formError}</div>}
               <button
                 type="submit"
@@ -543,6 +596,37 @@ export default function AdminProducts() {
                   </div>
                 )}
               </div>
+              
+              {/* Product Flags */}
+              <div className="flex gap-4">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="editIsNewArrival"
+                    name="isNewArrival"
+                    checked={editForm.isNewArrival}
+                    onChange={(e) => setEditForm({ ...editForm, isNewArrival: e.target.checked })}
+                    className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="editIsNewArrival" className="text-sm font-medium text-gray-700">
+                    New Arrival
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="editIsBestSeller"
+                    name="isBestSeller"
+                    checked={editForm.isBestSeller}
+                    onChange={(e) => setEditForm({ ...editForm, isBestSeller: e.target.checked })}
+                    className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="editIsBestSeller" className="text-sm font-medium text-gray-700">
+                    Best Seller
+                  </label>
+                </div>
+              </div>
+              
               {editError && <div className="text-scars-red text-sm">{editError}</div>}
               <button
                 type="submit"
