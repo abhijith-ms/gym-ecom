@@ -5,6 +5,40 @@ import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
+const sanitizeOfferPayload = (payload) => ({
+  title: payload.title,
+  discount: payload.discount,
+  description: payload.description,
+  validFrom: new Date(payload.validFrom),
+  validUntil: new Date(payload.validUntil),
+  showBadge: Boolean(payload.showBadge),
+  badgeText: payload.badgeText ?? 'LIMITED TIME OFFER',
+  ctaText: payload.ctaText,
+  ctaLink: payload.ctaLink,
+  terms: payload.terms ?? '*Offer valid on selected items. Cannot be combined with other promotions.',
+  delay: Number(payload.delay ?? 2000),
+  showOncePerSession: Boolean(payload.showOncePerSession),
+  isActive: Boolean(payload.isActive)
+});
+
+const dateOrderValidator = [
+  body('validFrom').custom((value, { req }) => {
+    const from = new Date(value);
+    if (isNaN(from.getTime())) throw new Error('Valid from date must be a valid date');
+    return true;
+  }),
+  body('validUntil').custom((value, { req }) => {
+    const until = new Date(value);
+    if (isNaN(until.getTime())) throw new Error('Valid until date must be a valid date');
+    const from = new Date(req.body.validFrom);
+    if (!isNaN(from.getTime()) && until < from) {
+      throw new Error('Valid until must be after valid from');
+    }
+    return true;
+  }),
+  body('delay').optional().isInt({ min: 0 }).withMessage('Delay must be a non-negative integer')
+];
+
 // @desc    Get current active offer
 // @route   GET /api/offers/current
 // @access  Public
@@ -104,58 +138,23 @@ router.post('/', protect, authorize('admin'), [
   body('title').notEmpty().withMessage('Title is required'),
   body('discount').notEmpty().withMessage('Discount text is required'),
   body('description').notEmpty().withMessage('Description is required'),
-  body('validFrom').custom((value) => {
-    if (!value) {
-      throw new Error('Valid from date is required');
-    }
-    const date = new Date(value);
-    if (isNaN(date.getTime())) {
-      throw new Error('Valid from date must be a valid date');
-    }
-    return true;
-  }),
-  body('validUntil').custom((value) => {
-    if (!value) {
-      throw new Error('Valid until date is required');
-    }
-    const date = new Date(value);
-    if (isNaN(date.getTime())) {
-      throw new Error('Valid until date must be a valid date');
-    }
-    return true;
-  }),
   body('ctaText').notEmpty().withMessage('CTA text is required'),
-  body('ctaLink').notEmpty().withMessage('CTA link is required')
+  body('ctaLink').notEmpty().withMessage('CTA link is required'),
+  ...dateOrderValidator,
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        errors: errors.array()
-      });
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
 
-    // Convert date strings to Date objects
-    const offerData = {
-      ...req.body,
-      validFrom: new Date(req.body.validFrom),
-      validUntil: new Date(req.body.validUntil)
-    };
-
+    const offerData = sanitizeOfferPayload(req.body);
     const offer = await Offer.create(offerData);
 
-    res.status(201).json({
-      success: true,
-      message: 'Offer created successfully',
-      offer
-    });
+    res.status(201).json({ success: true, message: 'Offer created successfully', offer });
   } catch (error) {
     console.error('Create offer error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error'
-    });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
@@ -166,47 +165,19 @@ router.put('/:id', protect, authorize('admin'), [
   body('title').notEmpty().withMessage('Title is required'),
   body('discount').notEmpty().withMessage('Discount text is required'),
   body('description').notEmpty().withMessage('Description is required'),
-  body('validFrom').custom((value) => {
-    if (!value) {
-      throw new Error('Valid from date is required');
-    }
-    const date = new Date(value);
-    if (isNaN(date.getTime())) {
-      throw new Error('Valid from date must be a valid date');
-    }
-    return true;
-  }),
-  body('validUntil').custom((value) => {
-    if (!value) {
-      throw new Error('Valid until date is required');
-    }
-    const date = new Date(value);
-    if (isNaN(date.getTime())) {
-      throw new Error('Valid until date must be a valid date');
-    }
-    return true;
-  }),
   body('ctaText').notEmpty().withMessage('CTA text is required'),
-  body('ctaLink').notEmpty().withMessage('CTA link is required')
+  body('ctaLink').notEmpty().withMessage('CTA link is required'),
+  ...dateOrderValidator,
 ], async (req, res) => {
-  console.log('Update offer request:', { id: req.params.id, body: req.body }); // Debug log
-  
+  console.log('Update offer request:', { id: req.params.id, body: req.body });
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log('Validation errors:', errors.array()); // Debug log
-      return res.status(400).json({
-        success: false,
-        errors: errors.array()
-      });
+      console.log('Validation errors:', errors.array());
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
 
-    // Convert date strings to Date objects
-    const updateData = {
-      ...req.body,
-      validFrom: new Date(req.body.validFrom),
-      validUntil: new Date(req.body.validUntil)
-    };
+    const updateData = sanitizeOfferPayload(req.body);
 
     const offer = await Offer.findByIdAndUpdate(
       req.params.id,
@@ -215,25 +186,15 @@ router.put('/:id', protect, authorize('admin'), [
     );
 
     if (!offer) {
-      console.log('Offer not found with ID:', req.params.id); // Debug log
-      return res.status(404).json({
-        success: false,
-        message: 'Offer not found'
-      });
+      console.log('Offer not found with ID:', req.params.id);
+      return res.status(404).json({ success: false, message: 'Offer not found' });
     }
 
-    console.log('Offer updated successfully:', offer._id); // Debug log
-    res.json({
-      success: true,
-      message: 'Offer updated successfully',
-      offer
-    });
+    console.log('Offer updated successfully:', offer._id);
+    res.json({ success: true, message: 'Offer updated successfully', offer });
   } catch (error) {
     console.error('Update offer error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error'
-    });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 

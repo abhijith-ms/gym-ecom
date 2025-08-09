@@ -1,8 +1,13 @@
 import './loadEnv.js';
 
-console.log('TWILIO_ACCOUNT_SID:', process.env.TWILIO_ACCOUNT_SID);
-console.log('TWILIO_AUTH_TOKEN:', process.env.TWILIO_AUTH_TOKEN);
-console.log('TWILIO_PHONE_NUMBER:', process.env.TWILIO_PHONE_NUMBER);
+// Only log non-sensitive config presence in development
+if (process.env.NODE_ENV === 'development') {
+  console.log('Twilio config present:', {
+    hasAccountSid: Boolean(process.env.TWILIO_ACCOUNT_SID),
+    hasAuthToken: Boolean(process.env.TWILIO_AUTH_TOKEN),
+    hasPhoneNumber: Boolean(process.env.TWILIO_PHONE_NUMBER)
+  });
+}
 
 import express from 'express';
 import mongoose from 'mongoose';
@@ -200,4 +205,6 @@ app.listen(PORT, () => {
 });
 
 // Razorpay initialization moved to payment routes
-console.log('RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID); 
+if (process.env.NODE_ENV === 'development') {
+  console.log('RAZORPAY_KEY_ID present:', Boolean(process.env.RAZORPAY_KEY_ID));
+} 

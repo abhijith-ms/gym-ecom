@@ -28,14 +28,16 @@ const AdminOffers = () => {
 
   const fetchCurrentOffer = async () => {
     try {
-      console.log('Fetching current offer...'); // Debug log
+      if (import.meta.env.DEV) console.log('Fetching current offer...');
       const response = await offersAPI.getCurrent();
-      console.log('API response:', response.data); // Debug log
+      if (import.meta.env.DEV) console.log('API response:', response.data);
       
       if (response.data.success && response.data.offer) {
         const offer = response.data.offer;
-        console.log('Received offer:', offer); // Debug log
-        console.log('Offer ID:', offer._id); // Debug log
+        if (import.meta.env.DEV) {
+          console.log('Received offer:', offer);
+          console.log('Offer ID:', offer._id);
+        }
         
         setCurrentOffer(offer);
         setForm({
@@ -54,7 +56,7 @@ const AdminOffers = () => {
           isActive: offer.isActive !== undefined ? offer.isActive : true
         });
       } else {
-        console.log('No offer found in response'); // Debug log
+        if (import.meta.env.DEV) console.log('No offer found in response');
       }
     } catch (error) {
       console.error('Error fetching current offer:', error);
@@ -82,27 +84,38 @@ const AdminOffers = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // basic client-side validation for dates
+    if (!form.validFrom || !form.validUntil) {
+      toast.error('Please select both start and end dates.');
+      return;
+    }
+    const from = new Date(form.validFrom);
+    const until = new Date(form.validUntil);
+    if (until < from) {
+      toast.error('End date must be after start date.');
+      return;
+    }
     
     try {
-      console.log('Submitting offer:', { currentOffer, form }); // Debug log
+      if (import.meta.env.DEV) console.log('Submitting offer:', { currentOffer, form });
       
       if (currentOffer && currentOffer._id) {
-        // Update existing offer
-        console.log('Updating offer with ID:', currentOffer._id); // Debug log
+        if (import.meta.env.DEV) console.log('Updating offer with ID:', currentOffer._id);
         await offersAPI.update(currentOffer._id, form);
         toast.success('Offer updated successfully!');
       } else {
-        // Create new offer
-        console.log('Creating new offer'); // Debug log
+        if (import.meta.env.DEV) console.log('Creating new offer');
         await offersAPI.create(form);
         toast.success('Offer created successfully!');
       }
       
       setIsEditing(false);
-      fetchCurrentOffer(); // Refresh the data
+      fetchCurrentOffer();
     } catch (error) {
       console.error('Error saving offer:', error);
-      toast.error('Failed to save offer');
+      const message = error.response?.data?.errors?.[0]?.msg || error.response?.data?.message || 'Failed to save offer';
+      toast.error(message);
     }
   };
 
@@ -155,20 +168,22 @@ const AdminOffers = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-scars-black">Manage Offers</h1>
           <div className="flex gap-2">
-            <button
-              onClick={async () => {
-                try {
-                  console.log('Testing API call...');
-                  const response = await offersAPI.getCurrent();
-                  console.log('Test API response:', response.data);
-                } catch (error) {
-                  console.error('Test API error:', error);
-                }
-              }}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-            >
-              Test API
-            </button>
+            {import.meta.env.DEV && (
+              <button
+                onClick={async () => {
+                  try {
+                    console.log('Testing API call...');
+                    const response = await offersAPI.getCurrent();
+                    console.log('Test API response:', response.data);
+                  } catch (error) {
+                    console.error('Test API error:', error);
+                  }
+                }}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              >
+                Test API
+              </button>
+            )}
             <button
               onClick={() => setIsEditing(!isEditing)}
               className="px-4 py-2 bg-scars-red text-white rounded hover:bg-red-700 transition"

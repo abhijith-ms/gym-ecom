@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-console.log('Environment VITE_API_URL:', import.meta.env.VITE_API_URL);
-console.log('Final API_BASE_URL:', API_BASE_URL);
-console.log('API_BASE_URL:', API_BASE_URL); // <-- Add this line for debugging
+if (import.meta.env.DEV) {
+  console.log('Environment VITE_API_URL:', import.meta.env.VITE_API_URL);
+  console.log('Final API_BASE_URL:', API_BASE_URL);
+}
 
 // Create axios instance
 export const api = axios.create({
@@ -22,9 +23,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Response interceptor to handle errors
