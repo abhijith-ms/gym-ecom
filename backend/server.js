@@ -40,23 +40,34 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-const allowedOrigins = [
+// Build allowed origins list
+const defaultOrigins = [
   'http://localhost:5173',
   'https://gym-ecom.vercel.app',
-  /^https:\/\/gym-ecom-.*\.vercel\.app$/, // Wildcard for preview URLs
   'https://gym-ecom-git-main-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-kmg59nnfg-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-g7n25n0p7-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-ittmmu26j-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-aeol07lp9-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-f77xp1meh-abhijith-mss-projects.vercel.app',
-  // Production domains
   'https://scars-india.com',
   'https://www.scars-india.com'
 ];
+const previewRegexes = [/^https:\/\/gym-ecom-.*\.vercel\.app$/];
+const envOrigins = (process.env.CORS_ALLOWED_ORIGINS || '')
+  .split(',')
+  .map(o => o.trim())
+  .filter(Boolean);
+const allowedOriginStrings = Array.from(new Set([...defaultOrigins, ...envOrigins]));
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow non-browser requests or same-origin requests
+    if (!origin) return callback(null, true);
+    if (allowedOriginStrings.includes(origin)) return callback(null, true);
+    if (previewRegexes.some(rx => rx.test(origin))) return callback(null, true);
+    return callback(new Error(`CORS not allowed for origin: ${origin}`), false);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']

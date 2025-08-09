@@ -159,7 +159,7 @@ const Navbar = () => {
       {/* Overlay for closing nav drawer */}
       {navDrawerOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-40"
+          className="fixed inset-0 bg-transparent z-40"
           onClick={toggleNavDrawer}
         />
       )}

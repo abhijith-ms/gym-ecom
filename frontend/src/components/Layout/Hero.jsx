@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi2";
-import scarsLogo from "../../assets/scars.png";
 import hero1 from "../../assets/banner/Scars939.webp";
 import hero2 from "../../assets/banner/Scars918.webp";
 import hero3 from "../../assets/banner/Scars880.webp";
@@ -61,20 +60,7 @@ const Hero = () => {
         <div className={`text-center text-white p-4 sm:p-8 md:p-12 flex flex-col items-center w-full max-w-6xl mx-auto pointer-events-auto transition-all duration-1000 ${
           isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
         }`}>
-          {/* Logo Section with Enhanced Animation */}
-          <div className="flex items-center justify-center mb-6 sm:mb-8 md:mb-10">
-            <div className="relative flex items-center justify-center w-48 h-20 sm:w-60 sm:h-26 md:w-80 md:h-32 lg:w-[32rem] lg:h-40 rounded-2xl sm:rounded-3xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30 hover:bg-white/30 transition-all duration-500 group">
-              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-2xl sm:rounded-3xl"></div>
-              <div className="absolute inset-0 animate-glow rounded-2xl sm:rounded-3xl opacity-50"></div>
-              <img
-                src={scarsLogo}
-                alt="SCARS Clothing Brand"
-                className="h-12 sm:h-18 md:h-24 lg:h-32 w-auto object-contain z-10 p-2 sm:p-3 md:p-4 lg:p-6 drop-shadow-2xl group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          </div>
-          
-          {/* Main Heading with Optimized Typography */}
+          {/* Main Heading */}
           <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tighter uppercase mb-3 sm:mb-4 md:mb-6 leading-tight">
             <span className="block lg:inline text-white drop-shadow-2xl">Men's Gym</span>
             <br className="lg:hidden" />
@@ -83,14 +69,14 @@ const Hero = () => {
             </span>
           </h1>
           
-          {/* Subtitle with Better Spacing */}
+          {/* Subtitle */}
           <p className="text-base sm:text-xl md:text-2xl lg:text-3xl mb-4 sm:mb-6 md:mb-8 max-w-4xl leading-relaxed font-light text-white/90 drop-shadow-lg">
             Premium <span className="text-scars-red font-bold">performance wear</span> designed for champions.
             <br className="hidden sm:block" />
             <span className="text-scars-red font-bold">Fast delivery</span> across India.
           </p>
           
-          {/* Enhanced CTA Buttons */}
+          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center">
             <Link 
               to="/collections" 
@@ -108,8 +94,7 @@ const Hero = () => {
             </Link>
           </div>
         </div>
-        {/* Enhanced Navigation Arrows */}
-        {/* Mobile: arrows near bottom, Desktop: arrows centered */}
+        {/* Navigation Arrows */}
         <button
           className="absolute left-4 sm:left-6 md:left-8 top-auto sm:top-1/2 bottom-24 sm:bottom-auto -translate-y-0 sm:-translate-y-1/2 text-white/90 hover:text-scars-red rounded-full p-2 sm:p-4 md:p-5 z-20 bg-black/40 hover:bg-black/60 backdrop-blur-md border-2 border-white/30 pointer-events-auto transition-all duration-300 hover:scale-110 sm:hover:scale-125 group shadow-2xl"
           onClick={() => instanceRef.current?.prev()}
@@ -126,7 +111,7 @@ const Hero = () => {
         >
           <HiArrowRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-200" />
         </button>
-        {/* Enhanced Pagination Dots */}
+        {/* Pagination Dots */}
         <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 lg:bottom-12 left-1/2 -translate-x-1/2 flex gap-3 sm:gap-4 z-20 pointer-events-auto">
           {images.map((_, idx) => (
             <button
