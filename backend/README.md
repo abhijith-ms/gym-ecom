@@ -220,3 +220,40 @@ All API responses follow a consistent format:
 ## License
 
 This project is licensed under the MIT License. 
+
+# Backend Deployment Notes
+
+## Environment Variables
+
+Create a `.env` with:
+
+- NODE_ENV=production
+- PORT=5000
+- MONGODB_URI=
+- JWT_SECRET=
+- JWT_EXPIRES_IN=30d
+- RAZORPAY_KEY_ID=
+- RAZORPAY_KEY_SECRET=
+- TWILIO_ACCOUNT_SID=
+- TWILIO_AUTH_TOKEN=
+- TWILIO_PHONE_NUMBER=
+- SMTP_HOST=
+- SMTP_PORT=
+- SMTP_USER=
+- SMTP_PASS=
+- SMTP_FROM="Scars India <no-reply@scars-india.com>"
+
+## CORS
+
+Ensure `https://scars-india.com` and `https://www.scars-india.com` are included in allowed origins. You can also use `CORS_ALLOWED_ORIGINS` as a comma-separated list and parse it in `server.js` if you'd like a config-based approach.
+
+## Security
+
+- Ensure logs don’t print secrets in production (already enforced).
+- Use strong JWT secret and rotate credentials.
+- Limit admin utility routes to development (already enforced).
+
+## Health and Monitoring
+
+- Exposes `/api/health` for uptime checks.
+- Add application monitoring (Sentry/Logtail) as needed. 

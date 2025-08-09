@@ -10,3 +10,20 @@ Currently, two official plugins are available:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Production Deployment Notes
+
+- Ensure a `.env` file exists with:
+  - `VITE_API_URL=https://api.scars-india.com/api`
+  - `VITE_RAZORPAY_KEY_ID=<public_key>`
+- Build using `npm run build`, deploy `dist/` to Vercel/Netlify.
+- Backend must be deployed with environment variables:
+  - `NODE_ENV=production`
+  - `PORT=5000`
+  - `MONGODB_URI`
+  - `JWT_SECRET`
+  - `JWT_EXPIRES_IN=30d`
+  - `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`
+  - `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`
+  - `SMTP_*` (if email is used)
+- Backend CORS must include `https://scars-india.com` and `https://www.scars-india.com`.

@@ -49,7 +49,10 @@ const allowedOrigins = [
   'https://gym-ecom-g7n25n0p7-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-ittmmu26j-abhijith-mss-projects.vercel.app',
   'https://gym-ecom-aeol07lp9-abhijith-mss-projects.vercel.app',
-  'https://gym-ecom-f77xp1meh-abhijith-mss-projects.vercel.app'
+  'https://gym-ecom-f77xp1meh-abhijith-mss-projects.vercel.app',
+  // Production domains
+  'https://scars-india.com',
+  'https://www.scars-india.com'
 ];
 
 app.use(cors({
@@ -93,90 +96,81 @@ app.get('/', (req, res) => {
   });
 });
 
-// Seed database route (for development/testing)
-app.get('/api/seed', async (req, res) => {
-  try {
-    const { exec } = await import('child_process');
-    exec('npm run seed', (error, stdout, stderr) => {
-      if (error) {
-        console.error('Seed error:', error);
-        return res.status(500).json({
-          success: false,
-          message: 'Failed to seed database',
-          error: error.message
+// Development-only utilities
+if (process.env.NODE_ENV === 'development') {
+  // Seed database route (for development/testing)
+  app.get('/api/seed', async (req, res) => {
+    try {
+      const { exec } = await import('child_process');
+      exec('npm run seed', (error, stdout, stderr) => {
+        if (error) {
+          console.error('Seed error:', error);
+          return res.status(500).json({
+            success: false,
+            message: 'Failed to seed database',
+            error: error.message
+          });
+        }
+        console.log('Seed output:', stdout);
+        res.json({
+          success: true,
+          message: 'Database seeded successfully',
+          output: stdout
         });
+      });
+    } catch (error) {
+      console.error('Seed route error:', error);
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+  });
+
+  // Create admin user route (for development/testing)
+  app.post('/api/create-admin', async (req, res) => {
+    try {
+      const { name, email, password } = req.body;
+      
+      if (!name || !email || !password) {
+        return res.status(400).json({ success: false, message: 'Name, email, and password are required' });
       }
-      console.log('Seed output:', stdout);
-      res.json({
+
+      // Check if user already exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ success: false, message: 'User with this email already exists' });
+      }
+
+      // Create admin user
+      const adminUser = await User.create({
+        name,
+        email,
+        password,
+        role: 'admin',
+        phone: '9876543210',
+        address: {
+          street: 'Admin Address',
+          city: 'Admin City',
+          state: 'Admin State',
+          zipCode: '12345',
+          country: 'Admin Country'
+        }
+      });
+
+      res.status(201).json({
         success: true,
-        message: 'Database seeded successfully',
-        output: stdout
+        message: 'Admin user created successfully',
+        user: {
+          id: adminUser._id,
+          name: adminUser.name,
+          email: adminUser.email,
+          role: adminUser.role
+        }
       });
-    });
-  } catch (error) {
-    console.error('Seed route error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error'
-    });
-  }
-});
-
-// Create admin user route (for development/testing)
-app.post('/api/create-admin', async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: 'Name, email, and password are required'
-      });
+    } catch (error) {
+      console.error('Create admin error:', error);
+      res.status(500).json({ success: false, message: 'Server error' });
     }
-
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: 'User with this email already exists'
-      });
-    }
-
-    // Create admin user
-    const adminUser = await User.create({
-      name,
-      email,
-      password,
-      role: 'admin',
-      phone: '9876543210',
-      address: {
-        street: 'Admin Address',
-        city: 'Admin City',
-        state: 'Admin State',
-        zipCode: '12345',
-        country: 'Admin Country'
-      }
-    });
-
-    res.status(201).json({
-      success: true,
-      message: 'Admin user created successfully',
-      user: {
-        id: adminUser._id,
-        name: adminUser.name,
-        email: adminUser.email,
-        role: adminUser.role
-      }
-    });
-  } catch (error) {
-    console.error('Create admin error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error'
-    });
-  }
-});
+  });
+}
 
 // Health check
 app.get('/api/health', (req, res) => {
